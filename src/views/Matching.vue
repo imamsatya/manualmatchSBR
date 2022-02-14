@@ -1,20 +1,17 @@
 <template>
     <div>
-
-       
-
-
-         <Toast />
+        <Toast />
         <!-- <Dropdown :class="myCardBgColorData+' '+myTextColorData" v-model="selectedVariabelSumber"
             :options="opsiVariabelSumber" optionLabel="name" placeholder="Pilih Variabel Sumber" />
         {{ selectedVariabelSumber['name']}}
         <br><br> -->
 
         <!-- <p>Options 0 : {{options[0][0]['name']}}</p> -->
-        <div v-if="this.selectedSumber2 !== null" >
+        <div v-if="this.selectedSumber2 !== null">
             Data <br>
             {{this.myData[0]}} <br> <br>
             {{this.selectedData}} <br><br>
+            {{this.finalSelectedData}} <br><br>
 
             <Button label="Submit" icon="" class="p-mb-2 p-ripple" @click="preview()" /> <br>
             <!-- {{this.selectedSumber2}} -->
@@ -22,7 +19,7 @@
         <DataTable v-if="this.selectedSumber2 !== null" :value="myData" rowGroupMode="subheader"
             :groupRowsBy="selectedVariabelSumber['name']" sortMode="single" :sortOrder="1" :paginator="true" :rows="10"
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-            :rowsPerPageOptions="[10,20,50]" responsiveLayout="scroll" :rowHover="true" 
+            :rowsPerPageOptions="[10,20,50]" responsiveLayout="scroll" :rowHover="true"  dataKey="id"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" class="p-datatable-sm">
             <template #empty>
                 <h5>Data Kosong</h5>
@@ -30,29 +27,37 @@
             <template #loading>
                 Mohon menunggu;
             </template>
-              <Column  headerStyle="width:3em;">
+            <Column headerStyle="width:3em;">
                 <template #header="slotProps">
-                    <Checkbox :id="slotProps.index + 1 +slotProps.length" v-model="checked" @change="checkBoxCheck(checked)" :binary="true" /> 
-                     <label class="p-ml-2" :for="slotProps.index + 1 +slotProps.length">Select All</label>
+                    <Checkbox :id="slotProps.index + 1 +slotProps.length" v-model="checked"
+                        @change="checkBoxCheck(checked)" :binary="true" />
+                    <label class="p-ml-2" :for="slotProps.index + 1 +slotProps.length">Select All</label>
                 </template>
 
                 <template :class="myCardBgColorData+' '+myTextColorData" #body="slotProps">
-                    
+
                     <Checkbox :id="slotProps.index" v-model="selectedData[slotProps.index]" :binary="true" />
-                    
+
                 </template>
             </Column>
             <Column header="No" headerStyle="width:3em;">
-                <template  :class="myCardBgColorData+' '+myTextColorData" #body="slotProps">
-                    <div style="cursor: pointer" @click="selectedData[slotProps.index] ? this.selectedData[slotProps.index]=false : this.selectedData[slotProps.index]=true" >{{slotProps.index + 1}}</div>
+                <template :class="myCardBgColorData+' '+myTextColorData" #body="slotProps">
+                    <div style="cursor: pointer"
+                        @click="selectedData[slotProps.index] ? this.selectedData[slotProps.index]=false : this.selectedData[slotProps.index]=true">
+                        {{slotProps.index + 1}}</div>
                     <!-- {{Object.keys(this.myData[1])}} -->
                 </template>
             </Column>
 
-            
-            <Column style="cursor: pointer" @click="cek(col, index2)" v-for="(col,index2) of Object.keys(this.myData[0])" :field="col"
-                :class="myCardBgColorData+' '+myTextColorData" :header="col" :key="col">
 
+            <Column style="cursor: pointer" v-for="(col,index2) of Object.keys(this.myData[0])" :field="col"
+                :class="myCardBgColorData+' '+myTextColorData" :header="col" :key="col">
+                <template #body="col">
+                    <div  @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
+                    {{col.data[Object.keys(this.myData[0])[index2]]}}
+                     <!-- {{selectedData}} {{col.index}} -->
+                    </div>
+                </template>
             </Column>
 
             <!-- <Column :class="myCardBgColorData+' '+myTextColorData" field="var1" header="Nama Perusahaan">
@@ -87,7 +92,7 @@
 
 
 
-         
+
             <!-- <template :class="myCardBgColorData+' '+myTextColorData" #groupheader="slotProps" >
 
                 
@@ -98,7 +103,7 @@
 
 
             </template> -->
-           
+
 
 
 
@@ -134,7 +139,9 @@
                 selectedSumber2: null,
                 mergedDataView: [],
                 options: [],
-                selectedData: null
+                selectedData: null,
+                finalSelectedData: [],
+                selectedCars: []
             }
         },
 
@@ -171,7 +178,7 @@
             this.selectedSumber2 = new Array(this.myData.length).fill('a').map(() => new Array(Object.keys(this
                 .myData[0]).length).fill('a'));
 
-            
+
 
 
             //  for (let index = 0; index < this.myData.length; index++) {
@@ -222,24 +229,34 @@
         },
 
         methods: {
-            cek(col, index2){
-console.log(col, index2)
+            preview(){
+                // console.log(this.selectedData.indexOf(true))
+                // console.log(indexesOf(this.selectedData, true))
+                for (let index = 0; index < this.selectedData.length; index++) {
+                    const element = this.selectedData[index];
+                    if (element) {
+                        this.finalSelectedData.push(this.myData[index])
+                    } 
+                    
+                }
             },
-            checkBoxCheck(prop){
+            cek(col, index2) {
+                console.log(col, index2)
+            },
+            checkBoxCheck(prop) {
                 console.log(prop)
                 if (prop == true) {
-                  for (let index = 0; index < this.selectedData.length; index++) {
-                      this.selectedData[index] = prop
-                      
-                  }
+                    for (let index = 0; index < this.selectedData.length; index++) {
+                        this.selectedData[index] = prop
+
+                    }
+                } else {
+                    for (let index = 0; index < this.selectedData.length; index++) {
+                        this.selectedData[index] = prop
+
+                    }
                 }
-                 else {
-                   for (let index = 0; index < this.selectedData.length; index++) {
-                      this.selectedData[index] = prop
-                      
-                  }
-                }
-                
+
             },
             submitData(props) {
                 console.log('selected Valuenya : ', this.selectedSumber2[props.index - ((props.index + 1) / 2)])
@@ -279,7 +296,7 @@ console.log(col, index2)
                 console.log('Selected : ', this.mySelectedValue.new[keys[0]])
                 console.log('All added Data: ', this.mySelectedValue)
                 this.addSelectedValue(this.mySelectedValue, props)
-               
+
             },
             // selectData(data, lastIndex) {
             //     console.log(`data : ${data}`)
@@ -363,20 +380,30 @@ console.log(col, index2)
             addSelectedValue(p, props) {
 
                 try {
-                     this.$store.dispatch('compareTable/setSelectedData', p, {
-                    root: true
-                }).then(
-                     this.$toast.add({severity:'success', summary: 'Yeay!', detail:'Data berhasil dipilih :)', life: 3000})
-                ).then(
-                    this.myData.splice(props.index-1, 2)
-                )
+                    this.$store.dispatch('compareTable/setSelectedData', p, {
+                        root: true
+                    }).then(
+                        this.$toast.add({
+                            severity: 'success',
+                            summary: 'Yeay!',
+                            detail: 'Data berhasil dipilih :)',
+                            life: 3000
+                        })
+                    ).then(
+                        this.myData.splice(props.index - 1, 2)
+                    )
                 } catch (error) {
                     console.log(error)
-                    this.$toast.add({severity:'error', summary: 'Huft!', detail:'Ada Error!', life: 3000})
+                    this.$toast.add({
+                        severity: 'error',
+                        summary: 'Huft!',
+                        detail: 'Ada Error!',
+                        life: 3000
+                    })
                 }
-                
 
-               
+
+
             }
 
         }
