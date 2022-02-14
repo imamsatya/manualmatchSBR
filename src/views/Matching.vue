@@ -239,6 +239,13 @@
                     } 
                     
                 }
+
+                  this.$toast.add({
+                    severity: 'success',
+                    summary: 'Yeay!',
+                    detail: 'Data berhasil disubmit :)',
+                    life: 3000
+                });
             },
             cek(col, index2) {
                 console.log(col, index2)
