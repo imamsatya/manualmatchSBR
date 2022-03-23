@@ -6,14 +6,16 @@
         <Card style="width: 25rem; margin-bottom: 2em; color: #726b7c;" class="p-shadow-6">
             <template #title>
                 <br>
-               <div style="font-weight: 700">Assessment App</div> 
+               <div style="font-weight: 700;color:#78b34d"><font-awesome-icon icon="fa-solid fa-leaf" />MatchA App</div> 
+               <span style="font-weight: normal;font-size: 18px;">Aplikasi Matching dan Assessment</span> <br>
             <br>
             </template>
             <template #content>
                 <div class="p-fluid  ">
                     <div class="p-grid p-jc-start p-ml-3 p-mb-6">
                         <span class="p-mb-3" style="font-size: 24px; font-weight: 600;">Halo, Selamat Datang! 👋🏻 </span> 
-                        <span>Silakan masuk ke akun Anda dan mulai bekerja</span> 
+                        <!-- <span>Silakan masuk ke akun Anda dan mulai bekerja</span>  -->
+                        <span>Everything is so <span style="font-weight: 700;color:#78b34d"> MatchA </span> better with you</span>
                     </div>
                    
                     <div class="field p-mb-4 p-ml-3 p-mr-3 col-12 md:col-12 sm:col-12">
@@ -33,7 +35,7 @@
                         </span>
                     </div>
                     <div class="field p-mb-4 p-ml-3 p-mr-3 col-12 md:col-12 sm:col-12">
-                         <router-link to="/home" @click="visibleLeft = false">
+                         <router-link to="/dashboard" @click="visibleLeft = false">
                            <Button label="Login" icon="" class="p-mb-2 " />
                         </router-link><br>
                     

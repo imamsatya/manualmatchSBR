@@ -7,7 +7,7 @@
     <div class="p-grid p-p-0 p-p-sm-1 p-p-md-2 p-p-lg-3 ">
       <!-- <div class="p-col-12 ">
 
-         <Card  @mouseover="myShadow = ''" @mouseleave="myShadow = 'p-shadow-6'"
+         <Card  @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
           :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
           style="border-radius: 18px; ">
 
@@ -49,7 +49,7 @@
 
       <div class="p-col-12 ">
          
-        <Card v-show="active == 0" @mouseover="myShadow = ''" @mouseleave="myShadow = 'p-shadow-6'"
+        <Card v-show="active == 0" @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
           :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeInLeft '"
           style="border-radius: 18px; ">
 
@@ -58,14 +58,15 @@
            <!-- <CompareTable></CompareTable> -->
            <!-- <CompareTable2></CompareTable2> -->
            <!-- <CompareTable3></CompareTable3> -->
-            <CompareTable4></CompareTable4>
+            <!-- <CompareTable4></CompareTable4> -->
+            <CompareTable5></CompareTable5>
 
             
           </template>
 
         </Card>
 
-        <Card v-show="active == 1" @mouseover="myShadow = ''" @mouseleave="myShadow = 'p-shadow-6'"
+        <Card v-show="active == 1" @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
           :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeInRight '"
           style="border-radius: 18px; ">
 
@@ -96,20 +97,20 @@
   // import CompareTable from '@/components/CompareTable.vue'
   // import CompareTable2 from '@/components/CompareTable2.vue'
   // import CompareTable3 from '@/components/CompareTable3.vue'
-  import CompareTable4 from '@/components/CompareTable4.vue'
+  import CompareTable5 from '@/components/CompareTable5.vue'
   // import DataService from '../services/DataService'
   import SelectedDataTable from '@/components/SelectedDataTable.vue'
  
   
   export default {
-    name: 'Home',
+    name: 'Assessment',
     components: {
       // CompareTable: () => import('../components/CompareTable.vue')
       // CompareTable,
       // CompareTable2,
       // CompareTable3,
       
-      CompareTable4,
+      CompareTable5,
       SelectedDataTable
         
     },
@@ -124,7 +125,7 @@
         data1View: [],
         data2View: [],
         data3View: [],
-        myShadow: 'p-shadow-6',
+        myShadow: '',
         active: 0,
         buttonCompareActive: 'buttonCompareActive',
         buttonDataSourceActive: '',

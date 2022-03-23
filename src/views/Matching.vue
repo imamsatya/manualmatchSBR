@@ -7,20 +7,35 @@
         <br><br> -->
 
         <!-- <p>Options 0 : {{options[0][0]['name']}}</p> -->
-        <div v-if="this.selectedSumber2 !== null">
-            Data <br>
-            {{this.myData[0]}} <br> <br>
-            {{this.selectedData}} <br><br>
-            {{this.finalSelectedData}} <br><br>
+        <div v-if="this.myData[0] !== null">
+             <br>
+             <DataTable :value="[myData[0]]" responsiveLayout="scroll"
+                :class="myCardBgColorData+' '+myTextColorData+' '+' p-m-2 animate__animated animate__fadeIn '"
+                style="border-radius: 18px;">
+                <Column field="id" header="id"></Column>
+                <Column field="var1" header="var1"></Column>
+                <Column field="var2" header="var2"></Column>
+                <Column field="var3" header="var3"></Column>
+                <Column field="var4" header="var4"></Column>
+                 <Column field="var5" header="var5 "></Column>
+            </DataTable>
+            
 
-            <Button label="Submit" icon="" class="p-mb-2 p-ripple" @click="preview()" /> <br>
+            
+            
+            <!-- {{this.selectedData}} <br><br>
+            {{this.finalSelectedData}} <br><br> -->
+            <div class="p-col-12">
+            <Button style="color:white;font-weight: 900" label="Skip" icon="" class="p-col-12 p-lg-12 p-button-warning    p-ripple" @click="preview()" />   
+            <Button style="font-weight:900" label="Submit" icon="" class="p-col-12 p-lg-12 p-mt-2 p-button-success  p-ripple" @click="preview()" /> 
+            </div>
             <!-- {{this.selectedSumber2}} -->
         </div>
         <DataTable v-if="this.selectedSumber2 !== null" :value="myData" rowGroupMode="subheader"
             :groupRowsBy="selectedVariabelSumber['name']" sortMode="single" :sortOrder="1" :paginator="true" :rows="10"
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             :rowsPerPageOptions="[10,20,50]" responsiveLayout="scroll" :rowHover="true"  dataKey="id"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" class="p-datatable-sm">
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" class="p-datatable-sm p-m-2">
             <template #empty>
                 <h5>Data Kosong</h5>
             </template>
@@ -260,7 +275,6 @@
                 } else {
                     for (let index = 0; index < this.selectedData.length; index++) {
                         this.selectedData[index] = prop
-
                     }
                 }
 
@@ -439,6 +453,10 @@
         background-color: v-bind(headerBg);
         color: v-bind(textColor);
     }
+
+    
+
+  
 
     /* .myThemeColor{
     color: v-bind(textColor);

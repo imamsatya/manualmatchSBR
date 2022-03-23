@@ -5,7 +5,20 @@ const apiClient = axios.create({
   withCredentials: false,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  },
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity
+})
+
+const apiClientSbr = axios.create({
+  baseURL: 'https://webapps.bps.go.id/pengolahansbr',
+  withCredentials: false,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
   },
   maxContentLength: Infinity,
   maxBodyLength: Infinity
@@ -13,7 +26,9 @@ const apiClient = axios.create({
 
 
 export default {
- 
+ getDummySBR(){
+  return apiClient.get('/dataSBR')
+ },
   getData1() {
     return apiClient.get('/data1')
   },
@@ -22,7 +37,17 @@ export default {
   },
   getData3() {
     return apiClient.get('/data3')
+  },
+  getDataSBR($id){
+    return apiClientSbr.get('/assessment-backend/api/assessment?user='+$id)
+  },
+  getPetugas(){
+    return apiClientSbr.get('/assessment-backend/api/petugas')
+  },
+  postDataSBR($data){
+    return apiClientSbr.post('/assessment-backend/api/assessment', $data)
   }
+
 }
 
 

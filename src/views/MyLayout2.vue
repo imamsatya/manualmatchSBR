@@ -4,7 +4,7 @@
             <Sidebar v-model:visible="visibleLeft" :class="myBgColorData+' '+myTextColorData" style="margin:0">
                 <div class="animate__animated animate__slideInLeft animate__faster" style="margin:0">
                     <div class="p-d-flex p-jc-start">
-                        <h2 class="p-ml-4">Aplikasi Assessment SBR</h2>
+                        <h2 class="p-ml-4" style="color: #78b34d">MatchA</h2> <br>
                     </div>
 
 
@@ -12,7 +12,7 @@
                     <br>
                     <div class="p-d-flex p-grid p-jc-between ">
                         <div :class="myBgColorData+' '+myTextColorData" style="border-color: transparent;">
-                            <router-link to="/home" @click="visibleLeft = false">
+                            <router-link to="/dashboard" @click="visibleLeft = false">
                                 <div :class="myTextColorData+ ' hvr-fade'"
                                     style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
 
@@ -23,73 +23,127 @@
                                 </div>
                             </router-link><br>
 
-
-                            <div @click="subMenuTrigerred()" :class="myTextColorData+ ' hvr-fade'+' '+selectedMenu"
-                                style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
-
-                                <div>
-                                    <i :class="MenuIcon+' p-mr-3 p-ml-3'"></i>
-                                    Menu
-                                </div>
-                            </div>
-
-
-                            <div v-show="subMenu" class="animate__animated animate__fadeIn animate__faster">
-
-                                <router-link to="/home" @click="visibleLeft = false">
-                                    <div :class="myTextColorData+ ' hvr-fade'"
-                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
-
-                                        <div>
-                                            <i class="pi pi-circle p-mr-3 p-ml-3"></i>
-                                            Menu 1
-                                        </div>
-                                    </div>
-                                </router-link><br>
-                                <router-link to="/home" @click="visibleLeft = false">
-                                    <div :class="myTextColorData+ ' hvr-fade'"
-                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
-
-                                        <div>
-                                            <i class="pi pi-circle p-mr-3 p-ml-3"></i>
-                                            Menu 2
-                                        </div>
-                                    </div>
-                                </router-link><br>
-                                <router-link to="/home" @click="visibleLeft = false">
-                                    <div :class="myTextColorData+ ' hvr-fade'"
-                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
-
-                                        <div>
-                                            <i class="pi pi-circle p-mr-3 p-ml-3"></i>
-                                            Menu 3
-                                        </div>
-                                    </div>
-                                </router-link>
-                            </div>
-                            <br>
-
-                            <router-link to="/home" @click="visibleLeft = false">
+                             <router-link to="/matching" @click="visibleLeft = false">
                                 <div :class="myTextColorData+ ' hvr-fade'"
                                     style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
 
                                     <div>
-                                        <i class="pi pi-th-large p-mr-3 p-ml-3"></i>
+                                        <i class="pi pi-table p-mr-3 p-ml-3"></i>
+                                        Matching
+                                    </div>
+                                </div>
+                            </router-link><br>
+
+
+
+                            <router-link to="/assessment" @click="visibleLeft = false">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                    <div>
+                                        <i class="pi pi-check-circle p-mr-3 p-ml-3"></i>
                                         Assessment
                                     </div>
                                 </div>
                             </router-link><br>
 
-                                 <router-link to="/matching" @click="visibleLeft = false">
+                           
+
+                            <div @click="subMenuAlokasiTrigerred()" :class="myTextColorData+ ' hvr-fade'+' '+selectedMenu"
+                                style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                <div>
+                                    <i :class="MenuIcon+' p-mr-3 p-ml-3'"></i>
+                                    Alokasi
+                                </div>
+                            </div>
+
+                            
+
+
+                            <div v-show="subMenuAlokasi" class="animate__animated animate__fadeIn animate__faster">
+
+                                <router-link to="/alokasi/matching" @click="visibleLeft = false">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                        <div>
+                                            <i class="pi pi-circle p-mr-3 p-ml-3"></i>
+                                            Matching
+                                        </div>
+                                    </div>
+                                </router-link><br>
+                                <router-link to="/alokasi/assessment" @click="visibleLeft = false">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                        <div>
+                                            <i class="pi pi-circle p-mr-3 p-ml-3"></i>
+                                            Assessment
+                                        </div>
+                                    </div>
+                                </router-link>
+
+                            </div>
+                            <br>
+                             <router-link to="/history" @click="visibleLeft = false">
                                 <div :class="myTextColorData+ ' hvr-fade'"
                                     style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
 
                                     <div>
-                                        <i class="pi pi-th-large p-mr-3 p-ml-3"></i>
-                                        Matching
+                                        <i class="pi pi-box p-mr-3 p-ml-3"></i>
+                                        Kegiatan
                                     </div>
                                 </div>
-                            </router-link><br><br>
+                            </router-link>
+                            <br>
+                            <router-link to="/history" @click="visibleLeft = false">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                    <div>
+                                        <i class="pi pi-folder p-mr-3 p-ml-3"></i>
+                                        History
+                                    </div>
+                                </div>
+                            </router-link>
+
+                            <!-- <div @click="subMenuHistoryTrigerred()" :class="myTextColorData+ ' hvr-fade'+' '+selectedMenuHistory"
+                                style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                <div>
+                                    <i :class="MenuIconHistory+' p-mr-3 p-ml-3'"></i>
+                                    History
+                                </div>
+                            </div>
+
+
+                            <div v-show="subMenuHistory" class="animate__animated animate__fadeIn animate__faster">
+
+                                <router-link to="/home" @click="visibleLeft = false">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                        <div>
+                                            <i class="pi pi-circle p-mr-3 p-ml-3"></i>
+                                            Matching
+                                        </div>
+                                    </div>
+                                </router-link><br>
+                                <router-link to="/home" @click="visibleLeft = false">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                        <div>
+                                            <i class="pi pi-circle p-mr-3 p-ml-3"></i>
+                                            Assessment
+                                        </div>
+                                    </div>
+                                </router-link><br>
+
+                            </div> -->
+                            <br>
+
 
 
 
@@ -127,18 +181,20 @@
                                     class="p-button-text p-button-rounded p-button-secondary p-mr-6 p-button-lg" />
 
                                 <OverlayPanel ref="op" :class="myBgColorData+' '+myTextColorData">
-                                    <div @click="darklight()" :class="myTextColorData+ ' p-ml-3 p-mr-3 '" 
+                                     <router-link to="/" >
+                                    <div  :class="myTextColorData+ ' p-ml-3 p-mr-3 '"
                                         style="cursor: pointer;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 100%;">
 
-                                        <div >
+                                        <div>
                                             <i class="pi pi-sign-out p-mr-2 "></i>
                                             Logout
                                         </div>
-                                    </div> 
-                                    
-                              
+                                    </div>
+                                     </router-link>
 
-                                   
+
+
+
 
                                 </OverlayPanel>
                             </div>
@@ -170,13 +226,10 @@
             <div class="p-d-flex p-ai-stretch p-jc-between ">
                 <p class="p-ml-6">COPYRIGHT © 2022 <span style="color: #00aeef;font-weight: 700;">B</span><span
                         style="color: #8cc63f;font-weight: 700;">P</span><span
-                        style="color: #f7941e;font-weight: 700;">S</span>, All rights Reserved </p>
-                <div>
-
-                    <p class="p-mr-6"><span style="font-weight: 700;">&lt; /&gt;</span> dengan <i
+                        style="color: #f7941e;font-weight: 700;">S</span>, All rights Reserved | Thank you so <span style="color: #78b34d; font-weight: 700;">MatchA</span> for what you do</p> 
+                    <p class="p-mr-6"><span style="font-weight: 700;">&lt; /&gt; &nbsp;</span> dengan <i
                             class="p-ml-2 pi pi-heart-fill animate__animated animate__flash animate__slow animate__infinite	infinite "
                             style="color: #D32F2F"></i></p>
-                </div>
             </div>
 
 
@@ -193,8 +246,11 @@
         data() {
             return {
                 selectedMenu: '',
-                subMenu: false,
+                selectedMenuHistory: '',
+                subMenuAlokasi: false,
+                subMenuHistory: false,
                 MenuIcon: 'pi pi-chevron-right',
+                MenuIconHistory: 'pi pi-chevron-right',
                 darklightIcon: 'pi pi-moon',
 
                 showsidebar: false,
@@ -277,15 +333,26 @@
             }
         },
         methods: {
-            subMenuTrigerred() {
-                if (this.subMenu == false) {
-                    this.subMenu = true
+            subMenuAlokasiTrigerred() {
+                if (this.subMenuAlokasi == false) {
+                    this.subMenuAlokasi = true
                     this.MenuIcon = 'pi pi-chevron-down'
                     this.selectedMenu = 'selectedMenu'
                 } else {
-                    this.subMenu = false
+                    this.subMenuAlokasi = false
                     this.MenuIcon = 'pi pi-chevron-right'
                     this.selectedMenu = ''
+                }
+            },
+            subMenuHistoryTrigerred() {
+                if (this.subMenuHistory == false) {
+                    this.subMenuHistory = true
+                    this.MenuIconHistory = 'pi pi-chevron-down'
+                    this.selectedMenuHistory = 'selectedMenu'
+                } else {
+                    this.subMenuHistory = false
+                    this.MenuIconHistory = 'pi pi-chevron-right'
+                    this.selectedMenuHistory = ''
                 }
             },
             sideBar() {
@@ -373,7 +440,7 @@
         color: white;
     }
 
-    .myhover:hover{
-         background-color: #9155fd;
+    .myhover:hover {
+        background-color: #9155fd;
     }
 </style>
