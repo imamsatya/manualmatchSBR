@@ -8,117 +8,58 @@
 
         <!-- <p>Options 0 : {{options[0][0]['name']}}</p> -->
         <Dropdown v-if="kegiatanOptions !== null"
-            :class="'p-col-12 p-lg-12 '+myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
-            v-model="selectedKegiatan" :options="kegiatanOptions.data" optionLabel="name" :filter="true"
-            placeholder="Pilih Kegiatan" :showClear="true" @change="getKegiatanData(selectedKegiatan)">
-            <template #value="slotProps">
-                <div class="country-item country-item-value" v-if="slotProps.value">
+                :class="'p-col-12 p-lg-12 '+myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
+                v-model="selectedKegiatan" :options="kegiatanOptions.data" optionLabel="name" :filter="true"
+                placeholder="Pilih Kegiatan" :showClear="true" @change="getKegiatanData(selectedKegiatan)">
+                 <template #value="slotProps">
+                    <div class="country-item country-item-value" v-if="slotProps.value">
 
-                    <div>{{slotProps.value.name}}</div>
-                </div>
-                <span v-else>
-                    {{slotProps.placeholder}}
-                </span>
-            </template>
-            <template #option="slotProps">
-                <div class="country-item">
-
-                    <div>{{slotProps.option.name}}</div>
-                </div>
-            </template>
-        </Dropdown>
-
-        <div v-if="this.allData !== null" class="p-col-12 p-lg-12">
-            <Card @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
-                :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
-                style="border-radius: 18px;">
-                <template #title>
-                    Progress
+                        <div>{{slotProps.value.name}}</div>
+                    </div>
+                    <span v-else>
+                        {{slotProps.placeholder}}
+                    </span>
                 </template>
-                <template #content>
-                    <div class="p-grid p-jc-center " style=" border-left-color: red; ">
-                        <div class="p-col-3 p-lg-3 p-md-12 p-sm-12">
-                            <div>
-                                <span style="font-size: 40px;"> {{this.allData.data.summary.belum_matching}} </span> <br>
-                                Belum Matching
-                            </div>
-                        </div>
-                        <div class="p-col-1">
-                            <Divider layout="vertical" />
-                        </div>
-                        <div class="p-col-3 p-lg-3 p-md-12 p-sm-12">
-                            <div>
-                                <span style="font-size: 40px;"> {{this.allData.data.summary.sudah_matching}} </span> <br>
-                                Sudah Matching
-                            </div>
-                        </div>
-                        <div class="p-col-1">
-                            <Divider layout="vertical" />
-                        </div>
-                        <div class="p-col-3 p-lg-3 p-md-12 p-sm-12">
-                            <div>
-                                <span style="font-size: 40px;"> {{this.allData.data.summary.total_data_matching}} </span>
-                                <br>
-                                Total
-                            </div>
-                        </div>
-                        <div class="p-col-12 p-mt-4">
-                            <ProgressBar style="color:white;"
-                                    :value="((this.allData.data.summary.sudah_matching/this.allData.data.summary.total_data_matching)*100).toFixed(2)" />
-                            <!-- <ProgressBar style="color:white;" :value="(2/3*100).toFixed(2)" /> -->
-                        </div>
+                <template #option="slotProps">
+                    <div class="country-item">
+
+                        <div>{{slotProps.option.name}}</div>
                     </div>
                 </template>
-            </Card>
-
-
-        </div>
+            </Dropdown>
         <div v-if="this.sbrData !== null">
-            <br>
-            <DataTable :value="[this.sbrData]" responsiveLayout="scroll"
+             <br>
+             <DataTable :value="[this.sbrData]" responsiveLayout="scroll"
                 :class="myCardBgColorData+' '+myTextColorData+' '+' p-m-2 animate__animated animate__fadeIn '"
                 style="border-radius: 18px;">
                 <!-- <Column field="id_alokasi" header="id"></Column>
                 <Column field="id_spool" header="var1"></Column> -->
-                <!-- <Column headerStyle="width:3em;"></Column>
-                <Column headerStyle="width:3em;" ></Column> -->
-                <Column>
-                <template #body="">
-                &nbsp;
-                </template>
-                </Column>
-                <Column>
-                <template #body="">
-                &nbsp;
-                </template>
-                </Column>
                 <Column field="nama_perusahaan" header="Nama Perusahaan"></Column>
                 <Column field="alamat" header="Alamat"></Column>
                 <Column field="provinsi" header="Kode Provinsi"></Column>
-                <Column field="kabupaten_kota" header="Kode Kabupaten/Kota"></Column>
-                <Column field="kecamatan" header="Kode Kecamatan"></Column>
-                <Column field="kelurahan_desa" header="Kode Kelurahan/Desa"></Column>
-                <Column field="nomor_telepon" header="No Telpon"></Column>
-                <Column field="aktivitas_perusahaan" header="Aktivitas Perusahaan"></Column>
-                <Column field="kbli_aktivitas" header="Kode KBLI"></Column>
+                 <Column field="kabupaten_kota" header="Kode Kabupaten/Kota"></Column>
+                 <Column field="kecamatan" header="Kode Kecamatan"></Column>
+                 <Column field="kelurahan_desa" header="Kode Kelurahan/Desa"></Column>
+                 <Column field="nomor_telepon" header="No Telpon"></Column>
+                 <Column field="aktivitas_perusahaan" header="Aktivitas Perusahaan"></Column>
+                 <Column field="kbli_aktivitas" header="Kode KBLI"></Column>
             </DataTable>
+            
 
-
-
-
-
+            
+            
+            <!-- {{this.selectedData}} <br><br>
+            {{this.finalSelectedData}} <br><br> -->
             <div class="p-col-12">
-                <Button style="color:white;font-weight: 900" label="Skip" icon=""
-                    class="p-col-12 p-lg-12 p-button-warning    p-ripple" @click="skip()" />
-                <Button style="font-weight:900" label="Submit" icon=""
-                    class="p-col-12 p-lg-12 p-mt-2 p-button-success  p-ripple" @click="submit()" />
+            <Button style="color:white;font-weight: 900" label="Skip" icon="" class="p-col-12 p-lg-12 p-button-warning    p-ripple" @click="preview()" />   
+            <Button style="font-weight:900" label="Submit" icon="" class="p-col-12 p-lg-12 p-mt-2 p-button-success  p-ripple" @click="preview()" /> 
             </div>
             <!-- {{this.selectedSumber2}} -->
         </div>
         <DataTable v-if="this.selectedSumber2 !== null" :value="this.matchingData" rowGroupMode="subheader"
-            :groupRowsBy="selectedVariabelSumber['name']" sortMode="single" :sortOrder="1" :paginator="false" :rows="10"
+            :groupRowsBy="selectedVariabelSumber['name']" sortMode="single" :sortOrder="1" :paginator="true" :rows="10"
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-            :rowsPerPageOptions="[10,20,50]" responsiveLayout="scroll" :rowHover="true" dataKey="id"
+            :rowsPerPageOptions="[10,20,50]" responsiveLayout="scroll" :rowHover="true"  dataKey="id"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" class="p-datatable-sm p-m-2">
             <template #empty>
                 <h5>Data Kosong</h5>
@@ -139,121 +80,25 @@
 
                 </template>
             </Column>
-            <!-- <Column header="No">
+            <Column header="No" headerStyle="width:3em;">
                 <template :class="myCardBgColorData+' '+myTextColorData" #body="slotProps">
                     <div style="cursor: pointer"
                         @click="selectedData[slotProps.index] ? this.selectedData[slotProps.index]=false : this.selectedData[slotProps.index]=true">
                         {{slotProps.index + 1}}</div>
-                    
-                </template>
-            </Column> -->
-            <Column field="skor_kalo" header="Skor">
-                <template #body="col">
-                    <div 
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.skor_kalo}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="nama_perusahaan" header="Nama Perusahaan">
-                <template #body="col">
-                    <div :style="this.sbrData['nama_perusahaan'] == col.data.nama_perusahaan  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.nama_perusahaan}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="alamat" header="Alamat">
-                <template #body="col">
-                    <div :style="this.sbrData['alamat'] == col.data.alamat  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.alamat}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="kode_provinsi" header="Kode Provinsi">
-                <template #body="col">
-                    <div :style="this.sbrData['provinsi'] == col.data.kode_provinsi  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.kode_provinsi}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="kode_kabupaten_kota" header="Kode Kabupaten/Kota">
-                <template   #body="col">
-                    <div
-                        :style="this.sbrData['kabupaten_kota'] == col.data.kode_kabupaten_kota  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.kode_kabupaten_kota}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="kode_kecamatan" header="Kode Kecamatan">
-                <template #body="col">
-                    <div
-                    :style="this.sbrData['kecamatan'] == col.data.kode_kecamatan  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.kode_kecamatan}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="kode_kelurahan_desa" header="Kode Kelurahan/Desa">
-                <template #body="col">
-                    <div
-                    :style="this.sbrData['kelurahan_desa'] == col.data.kode_kelurahan_desa  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.kode_kelurahan_desa}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="nomor_telepon" header="No Telpon">
-                <template #body="col">
-                    <div
-                    :style="this.sbrData['nomor_telepon'] == col.data.nomor_telepon  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.nomor_telepon}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="aktivitas_perusahaan" header="Aktivitas Perusahaan">
-                <template #body="col">
-                    <div
-                     :style="this.sbrData['aktivitas_perusahaan'] == col.data.aktivitas_perusahaan  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.aktivitas_perusahaan}}
-
-                    </div>
-                </template>
-            </Column>
-            <Column field="kbli_aktivitas" header="Kode KBLI">
-                <template #body="col">
-                    <div
-                     :style="this.sbrData['kbli_aktivitas'] == col.data.kbli_aktivitas  ? 'color: #56ca00; font-weight:700;' : ''"
-                        @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
-                        {{col.data.kbli_aktivitas}}
-
-                    </div>
+                    <!-- {{Object.keys(this.myData[1])}} -->
                 </template>
             </Column>
 
 
-            <!-- <Column style="cursor: pointer" v-for="(col,index2) of Object.keys(this.myData[0])" :field="col"
+            <Column style="cursor: pointer" v-for="(col,index2) of Object.keys(this.myData[0])" :field="col"
                 :class="myCardBgColorData+' '+myTextColorData" :header="col" :key="col">
                 <template #body="col">
                     <div  @click="selectedData[col.index] ? this.selectedData[col.index]=false : this.selectedData[col.index]=true">
                     {{col.data[Object.keys(this.myData[0])[index2]]}}
-                 
+                     <!-- {{selectedData}} {{col.index}} -->
                     </div>
                 </template>
-            </Column> -->
+            </Column>
 
             <!-- <Column :class="myCardBgColorData+' '+myTextColorData" field="var1" header="Nama Perusahaan">
                 <template #body="slotProps">
@@ -304,11 +149,6 @@
 
         </DataTable>
         <ProgressSpinner v-else />
-        <Dialog header="Mohon Menunggu" v-model:visible="loadingDialog" :style="{width: '30vw'}" :modal="true">
-            <div class="p-grid p-jc-center ">
-                <ProgressSpinner />
-            </div>
-        </Dialog>
     </div>
 </template>
 
@@ -318,8 +158,6 @@
     import Toast from 'primevue/toast';
     import ProgressSpinner from 'primevue/progressspinner';
     import Checkbox from 'primevue/checkbox';
-    import ProgressBar from 'primevue/progressbar';
-    import Dialog from 'primevue/dialog'
     export default {
         name: 'CompareTable',
         components: {
@@ -327,16 +165,12 @@
             ProgressSpinner,
             // ToastService,
             Toast,
-            Checkbox,
-            ProgressBar,
-            Dialog
+            Checkbox
         },
         data() {
             return {
-                loadingDialog: false,
-                allData: null,
                 sbrData: null,
-                matchingData: null,
+                matchingData : null,
                 selectedKegiatan: null,
                 kegiatanOptions: null,
                 mySelectedValue: [],
@@ -447,83 +281,33 @@
         },
 
         methods: {
-            async skip(){
-                this.loadingDialog = true
-                await DataService.getDataKegiatan(this.selectedKegiatan.id_kegiatan)
+            async getKegiatanData(data){
+                console.log('selectedKegiatan',data.id_kegiatan)
+                 await DataService.getDataKegiatan(data.id_kegiatan)
                     .then(response => {
-
-                        this.allData = response.data
-                        this.sbrData = this.allData.data.spool
-                        this.matchingData = this.allData.data.matching
-                        console.log('response.data', this.allData)
+                        var x = response.data
+                        this.sbrData = x.data.spool
+                        this.matchingData = x.data.matching
+                        console.log('response.data', x)
                         console.log('sbrData', this.sbrData)
-                        this.selectedData = new Array(this.matchingData.length).fill(false)
-                        this.loadingDialog = false
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        this.loadingDialog = false
-                    })
-            },
-            async submit() {
-                this.loadingDialog = true
-                this.preview()
-                var idSbr = []
-                this.finalSelectedData.forEach(element => {
-                    idSbr.push(element.idsbr)
-                });
-                const postForm = {
-                    "id_alokasi": this.sbrData.id_alokasi,
-                    "id_spool": this.sbrData.id_spool,
-                    "idsbr": idSbr
-                }
-                console.log('finalSelectedData', this.finalSelectedData)
-                console.log('postForm', postForm)
-
-                await DataService.postDataKegiatan(this.selectedKegiatan.id_kegiatan, postForm)
-                    .then(response => {
-                        console.log('responsePost', response)
-                        this.getKegiatanData(this.selectedKegiatan).then(response => {
-                            console.log('response getKegiatanData', response)
-                            this.loadingDialog = false
-                        })
-                        
-
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        this.loadingDialog = false
-                    })
-            },
-            async getKegiatanData(data) {
-                console.log('selectedKegiatan', data.id_kegiatan)
-                await DataService.getDataKegiatan(data.id_kegiatan)
-                    .then(response => {
-
-                        this.allData = response.data
-                        this.sbrData = this.allData.data.spool
-                        this.matchingData = this.allData.data.matching
-                        console.log('response.data', this.allData)
-                        console.log('sbrData', this.sbrData)
-                        this.selectedData = new Array(this.matchingData.length).fill(false)
-
+                       
                     })
                     .catch(error => {
                         console.log(error)
                     })
             },
-            preview() {
+            preview(){
                 // console.log(this.selectedData.indexOf(true))
                 // console.log(indexesOf(this.selectedData, true))
                 for (let index = 0; index < this.selectedData.length; index++) {
                     const element = this.selectedData[index];
                     if (element) {
-                        this.finalSelectedData.push(this.matchingData[index])
-                    }
-
+                        this.finalSelectedData.push(this.myData[index])
+                    } 
+                    
                 }
 
-                this.$toast.add({
+                  this.$toast.add({
                     severity: 'success',
                     summary: 'Yeay!',
                     detail: 'Data berhasil disubmit :)',
@@ -722,9 +506,9 @@
         color: v-bind(textColor);
     }
 
+    
 
-
-
+  
 
     /* .myThemeColor{
     color: v-bind(textColor);

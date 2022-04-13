@@ -46,7 +46,18 @@ export default {
   },
   postDataSBR($data){
     return apiClientSbr.post('/assessment-backend/api/assessment', $data)
+  },
+  getKegiatanActiveMatching(){
+    return apiClientSbr.get('/matcha-backend/api/kegiatan?type=matching&status=active')
+  },
+  getDataKegiatan($id_kegiatan){
+    return apiClientSbr.get('matcha-backend/api/kegiatan/'+$id_kegiatan+'/matching/2')
+  },
+  postDataKegiatan($id_kegiatan, $data){
+    return apiClientSbr.post('matcha-backend/api/kegiatan/'+$id_kegiatan+'/matching/2', $data)
   }
+  
+
 
 }
 

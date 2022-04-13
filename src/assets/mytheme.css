@@ -1619,14 +1619,14 @@
     border-radius: 3px;
   }
   .p-button:enabled:hover {
-    background: #9155fd;;
+    background: #7e46e7;;
     color: #ffffff;
-    border-color: #9155fd;;
+    border-color: #7e46e7;;
   }
   .p-button:enabled:active {
-    background: #9155fd;;
+    background: #7e46e7;;
     color: #ffffff;
-    border-color: #9155fd;
+    border-color: #7e46e7;
   }
   .p-button.p-button-outlined {
     background-color: transparent;
@@ -1662,7 +1662,7 @@
   }
   .p-button.p-button-text:enabled:hover {
     background: #9155fd;;
-    color: #9155fd;
+    color: #ffffff;
     border-color: transparent;
   }
   .p-button.p-button-text:enabled:active {
@@ -1684,7 +1684,7 @@
   .p-button:focus {
     outline: 0 none;
     outline-offset: 0;
-    box-shadow: 0 0 0 0.2rem #9155fd;
+    box-shadow: 0 0 0 0.2rem #7e46e7;
   }
   .p-button .p-button-icon-left {
     margin-right: 0.5rem;
