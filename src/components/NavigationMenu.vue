@@ -1,120 +1,163 @@
 <template>
-    <div :class="myBgColorData+' myBgLayout '+myTextColorData">
-        <div :class="myBgColorData+ ' '+'p-grid p-ai-stretch nested-grid p-nogutter'" style="margin:0;">
-            <Sidebar v-model:visible="visibleLeft" :class="myBgColorData+' '+myTextColorData" style="margin:0">
-                <div class="animate__animated animate__slideInLeft animate__faster" style="margin:0">
-                    <div class="p-grid p-jc-center p-d-flex p-flex-column p-ac-center ">
-                        <img src="../assets/matcha.png" class="hvr-bob p-mt-4"
-                            v-tooltip.right="{value: this.matchaMessage[Math.floor(Math.random()*this.matchaMessage.length)], class: 'custom-error'}"
-                            style="width: 20%; height: 18%;" alt="" srcset="">
+    <div class="p-d-flex p-grid p-jc-between ">
+                        <div :class="myBgColorData+' '+myTextColorData" style="border-color: transparent;">
+                            <router-link v-if="currentUser.roles[0]['name'] == 'ROLE_ADMIN'" :to="{name: 'dashboardAdmin'}" @click="this.$emit('showSideBar')">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
 
-                    </div>
-                    <div class="p-grid p-jc-center  p-ac-center " style="margin-top: -7%;">
-                        <h2 class="" style="color: #78b34d; font-weight: 700;">MatchA</h2>
-                    </div>
-                    <NavigationMenu @showSideBar="sideBar()"/>  
-                </div>
-            </Sidebar>
+                                    <div>
+                                        <i class="pi pi-th-large p-mr-2 p-ml-2"></i>
+                                        Dashboard
+                                    </div>
+                                </div>
+                            </router-link>
+                              <router-link v-else :to="{name: 'dashboardUser'}" @click="this.$emit('showSideBar')">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                    <div>
+                                        <i class="pi pi-th-large p-mr-2 p-ml-2"></i>
+                                        Dashboard
+                                    </div>
+                                </div>
+                            </router-link>
+                            <br>
+
+                            <router-link  :to="{name: 'matching'}" @click="this.$emit('showSideBar')">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                    <div>
+                                        <i class="pi pi-table p-mr-2 p-ml-2"></i>
+                                        Matching
+                                    </div>
+                                </div>
+                            </router-link><br>
 
 
-            <div :class="contentClass + ' '+ myBgColorData">
 
-                <div class="p-col-12">
-                    <br>
-                    <div>
+                            <router-link :to="{name: 'assessment'}" @click="this.$emit('showSideBar')">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
 
-                        <div class="p-d-flex p-ai-stretch p-jc-between">
-                            <Button icon="pi pi-bars" @click="sideBar()"
-                                class="p-button-text p-button-lg  p-button-secondary p-button-rounded p-ml-4" />
-                            <div>
+                                    <div>
+                                        <i class="pi pi-check-circle p-mr-2 p-ml-2"></i>
+                                        Assessment
+                                    </div>
+                                </div>
+                            </router-link><br>
 
-                                <Button :icon="darklightIcon"
-                                    class="p-button-text p-button-rounded  p-button-secondary p-button-lg p-mr-2"
-                                    @click="darklight() " />
-                                <Button icon="pi pi-user" @click="toggle"
-                                    class="p-button-text p-button-rounded p-button-secondary p-mr-6 p-button-lg" />
 
-                                <OverlayPanel ref="op" :class="myBgColorData+' '+myTextColorData">
 
-                                    <div :class="myTextColorData+ ' p-ml-3 p-mr-3 '"
-                                        style="cursor: pointer;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 100%;">
+                            <div v-if="currentUser.roles[0]['name'] == 'ROLE_ADMIN'"
+                                @click="subMenuAlokasiTrigerred()"
+                                :class="myTextColorData+ ' hvr-fade'+' '+selectedMenu"
+                                style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                <div>
+                                    <i :class="MenuIcon+' p-mr-2 p-ml-2'"></i>
+                                    Alokasi
+                                </div>
+                            </div>
+
+
+
+
+                            <div v-show="subMenuAlokasi" class="animate__animated animate__fadeIn animate__faster">
+
+                                <router-link :to="{name: 'alokasiMatching'}" @click="this.$emit('showSideBar')">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
 
                                         <div>
-                                            <i class="pi pi-user p-mr-2 "></i>
-                                            {{currentUser.name}} <br>
-                                            <hr>
-
-                                            <div @click="logout">
-                                                <i class="pi pi-sign-out p-mr-2 "></i>
-                                                Logout
-                                            </div>
-
+                                            <i class="pi pi-circle p-mr-2 p-ml-2"></i>
+                                            Matching
                                         </div>
                                     </div>
+                                </router-link><br>
+                                <router-link :to="{name: 'alokasiAssessment'}"  @click="this.$emit('showSideBar')">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
 
+                                        <div>
+                                            <i class="pi pi-circle p-mr-2 p-ml-2"></i>
+                                            Assessment
+                                        </div>
+                                    </div>
+                                </router-link>
 
-
-
-
-
-                                </OverlayPanel>
                             </div>
+                            <br>
+                            <router-link v-if="currentUser.roles[0]['name'] == 'ROLE_ADMIN'" :to="{name: 'kegiatan'}"
+                                 @click="this.$emit('showSideBar')">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                    <div>
+                                        <i class="pi pi-box p-mr-2 p-ml-2"></i>
+                                        Kegiatan
+                                    </div>
+                                </div>
+                            </router-link>
+                            <br>
+                            <!-- <router-link v-if="currentUser.roles[0]['name'] == 'ROLE_ADMIN'" to="/history"
+                                @click="visibleLeft = false">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                    <div>
+                                        <i class="pi pi-folder p-mr-2 p-ml-2"></i>
+                                        History
+                                    </div>
+                                </div>
+                            </router-link> -->
+
+                            <!-- <div @click="subMenuHistoryTrigerred()" :class="myTextColorData+ ' hvr-fade'+' '+selectedMenuHistory"
+                                style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                <div>
+                                    <i :class="MenuIconHistory+' p-mr-2 p-ml-2'"></i>
+                                    History
+                                </div>
+                            </div>
+
+
+                            <div v-show="subMenuHistory" class="animate__animated animate__fadeIn animate__faster">
+
+                                <router-link to="/home" @click="visibleLeft = false">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                        <div>
+                                            <i class="pi pi-circle p-mr-2 p-ml-2"></i>
+                                            Matching
+                                        </div>
+                                    </div>
+                                </router-link><br>
+                                <router-link to="/home" @click="visibleLeft = false">
+                                    <div :class="myTextColorData+ ' hvr-fade'"
+                                        style="padding: 10px;font-size: 16px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                        <div>
+                                            <i class="pi pi-circle p-mr-2 p-ml-2"></i>
+                                            Assessment
+                                        </div>
+                                    </div>
+                                </router-link><br>
+
+                            </div> -->
+                            <br>
+
                         </div>
-                        <br>
                     </div>
-
-                </div>
-
-                <div class="p-col-10  p-offset-1" style=" min-height: calc(100vh - (90px + 66px));">
-                    <div class="">
-                        <!-- {{currentUser}} -->
-                        <!-- {{currentUser.roles[0]['name']}} -->
-                        <!-- {{localStorage.getItem('token')}} -->
-                        <router-view v-slot="{ Component }"  >
-                            <transition name="slide" mode="out-in">
-                                <component :is="Component" :key="$route.path"></component>
-                            </transition>
-                        </router-view>
-                        <!-- <router-view></router-view> -->
-                    </div>
-                </div>
-
-
-
-
-
-
-
-            </div>
-
-        </div>
-        <div :class="myBgColorData+' '+myTextColorData+' p-col-12'" style="bottom: 0;   width: 100%; ">
-
-
-
-            <div class="p-d-flex p-ai-stretch p-jc-between ">
-                <p class="p-ml-6">COPYRIGHT © 2022 <span style="color: #00aeef;font-weight: 700;">B</span><span
-                        style="color: #8cc63f;font-weight: 700;">P</span><span
-                        style="color: #f7941e;font-weight: 700;">S</span>, All rights Reserved | Thank you so <span
-                        style="color: #78b34d; font-weight: 700;">MatchA</span> for what you do</p>
-                <p class="p-mr-6"><span style="font-weight: 700;">&lt; /&gt; &nbsp;</span> dengan <i
-                        class="p-ml-2 pi pi-heart-fill animate__animated animate__flash animate__slow animate__infinite	infinite hvr-pulse-grow "
-                        style="color: #D32F2F"></i></p>
-            </div>
-
-
-        </div>
-    </div>
 </template>
 
 <script>
-    import OverlayPanel from 'primevue/overlaypanel';
+
     import Tooltip from 'primevue/tooltip';
-    import NavigationMenu from '../components/NavigationMenu.vue'
     export default {
         components: {
-            OverlayPanel,
-            NavigationMenu
+           
 
 
         },
@@ -249,7 +292,16 @@
                 }
             },
             sideBar() {
-                this.visibleLeft == true ? this.visibleLeft = false : this.visibleLeft = true
+                if (this.sidebarClass == "p-col-0 p-md-0 p-lg-0") {
+                    // this.sidebarClass = "p-col-2 p-md-2 p-lg-2"
+                    // this.contentClass = "p-col-10 p-md-10 p-lg-10"
+                    this.showsidebar = true
+                    this.visibleLeft = true
+                } else {
+                    // this.sidebarClass = "p-col-0 p-md-0 p-lg-0"
+                    // this.contentClass = "p-col-12 p-md-12 p-lg-12"
+                    // this.showsidebar = false
+                }
             },
             darklight() {
                 if (this.myBgColorData == 'mydarkbgcolor') {
@@ -273,14 +325,17 @@
 </script>
 
 <style>
-  
+
+    .router-link-active .router-link-exact-active {
+        color: red !important;
+        background-color: red !important;
+    }
     .mydarkbgcolor {
         background-color: #28243d;
     }
 
     .mylightbgcolor {
         background-color: #f4f5fa;
-        
     }
 
     .mydarkcardcolor {
@@ -443,16 +498,5 @@
         animation-fill-mode: forwards;
         -webkit-animation-direction: normal, alternate;
         animation-direction: normal, alternate;
-    }
-
-    /* transition */
-    .slide-enter-active,
-    .slide-leave-active{
-        transition: opacity 0.5s, transform 0.25s;
-    }
-    .slide-enter-from,
-    .slide-leave-to{
-        opacity: 0;
-        transform: translateX(-2%);
     }
 </style>

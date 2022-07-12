@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import Home from '../views/Home.vue'
-
+import Login from '../views/LoginPage.vue'
+import store from '../store/index.js'
 const routes = [
   {
     path: '/',
-    name: 'Login',
-    component: () => import('../views/LoginPage.vue'),
+    name: 'login',
+    //karena inisiasi awal maka tidak perlu lazy load
+    // component: () => import('../views/LoginPage.vue'),
+    component: Login
    
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -14,11 +16,12 @@ const routes = [
   },
   {
     path: '/assessment',
-    name: 'Assessment',
+   
     component: () => import('../views/MyLayout2.vue'),
     children: [{
       path: '',
-      component: () => import('../views/Assessment.vue')
+      name: 'assessment',
+      component: () => import(/* webpackChunkName: "Assessment"*/'../views/Assessment.vue')
     }],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -27,11 +30,26 @@ const routes = [
   },
   {
     path: '/matching',
-    name: 'Matching',
+
     component: () => import('../views/MyLayout2.vue'),
     children: [{
       path: '',
-      component: () => import('../views/Matching.vue')
+      name: 'matching',
+      component: () => import(/* webpackChunkName: "Matching"*/'../views/Matching.vue')
+    }],
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    
+  },
+  {
+    path: '/dashboard/admin',
+ 
+    component: () => import('../views/MyLayout2.vue'),
+    children: [{
+      path: '/dashboard/admin',
+      name: 'dashboardAdmin',
+      component: () => import(/* webpackChunkName: "DashboardAdmin"*/'../views/DashboardAdmin.vue')
     }],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -40,11 +58,26 @@ const routes = [
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+ 
+    component: () => import('../views/MyLayout2.vue'),
+    children: [{
+      path: '/dashboard',
+      name: 'dashboardUser',
+      component: () => import(/* webpackChunkName: "DashboardAdmin"*/'../views/DashboardUser.vue')
+    }],
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    
+  },
+  {
+    path: '/kegiatan',
+    
     component: () => import('../views/MyLayout2.vue'),
     children: [{
       path: '',
-      component: () => import('../views/Dashboard.vue')
+      name: 'kegiatan',
+      component: () => import(/* webpackChunkName: "Kegiatan"*/'../views/Kegiatan.vue')
     }],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -66,11 +99,12 @@ const routes = [
   },
   {
     path: '/alokasi/matching',
-    name: 'AlokasiMatching',
+   
     component: () => import('../views/MyLayout2.vue'),
     children: [{
       path: '',
-      component: () => import('../views/AlokasiMatching.vue')
+      name: 'alokasiMatching',
+      component: () => import(/* webpackChunkName: "AlokasiMatching"*/'../views/AlokasiMatching.vue')
     }],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -79,11 +113,12 @@ const routes = [
   },
   {
     path: '/alokasi/assessment',
-    name: 'AlokasiAssessment',
+    
     component: () => import('../views/MyLayout2.vue'),
     children: [{
       path: '',
-      component: () => import('../views/AlokasiAssessment.vue')
+      name: 'alokasiAssessment',
+      component: () => import(/* webpackChunkName: "AlokasiAssessment"*/'../views/AlokasiAssessment.vue')
     }],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -103,6 +138,11 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notfound',
+    component: () => import(/* webpackChunkName: "NotFound"*/'../views/NotFound.vue')
+  }
   
   // {
   //   path: '/MyLayout',
@@ -122,6 +162,26 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => { 
+  if (to.matched.some(record => record.meta.auth)) {
+    if (store.getters.isLoggedIn && store.getters.user) {
+      next()
+      return
+    }
+    next('/')
+  }
+
+  if (to.matched.some(record => record.meta.guest)) {
+    if (!store.getters.isLoggedIn) {
+      next()
+      return
+    }
+    next('/dashboard')
+  }
+
+  next()
 })
 
 export default router

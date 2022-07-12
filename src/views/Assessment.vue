@@ -48,25 +48,23 @@
       </div> -->
 
       <div class="p-col-12 ">
-         
-        <Card v-show="active == 0" @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
+         <CompareTable5></CompareTable5>
+
+        <!-- <Card v-show="active == 0" @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
           :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeInLeft '"
           style="border-radius: 18px; ">
 
           <template #content>
             
-           <!-- <CompareTable></CompareTable> -->
-           <!-- <CompareTable2></CompareTable2> -->
-           <!-- <CompareTable3></CompareTable3> -->
-            <!-- <CompareTable4></CompareTable4> -->
+         
             <CompareTable5></CompareTable5>
 
             
           </template>
 
-        </Card>
+        </Card> -->
 
-        <Card v-show="active == 1" @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
+        <!-- <Card v-show="active == 1" @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
           :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeInRight '"
           style="border-radius: 18px; ">
 
@@ -75,7 +73,7 @@
             <SelectedDataTable></SelectedDataTable>
           </template>
 
-        </Card>
+        </Card> -->
       </div>
 
 
@@ -99,7 +97,7 @@
   // import CompareTable3 from '@/components/CompareTable3.vue'
   import CompareTable5 from '@/components/CompareTable5.vue'
   // import DataService from '../services/DataService'
-  import SelectedDataTable from '@/components/SelectedDataTable.vue'
+  // import SelectedDataTable from '@/components/SelectedDataTable.vue'
  
   
   export default {
@@ -111,7 +109,7 @@
       // CompareTable3,
       
       CompareTable5,
-      SelectedDataTable
+      // SelectedDataTable
         
     },
     data() {
@@ -222,14 +220,11 @@
     color: white;
   }
 
-  :host>>>.p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-state-active {
-    background-color: #d90096;
-    border: 1px solid #d600d9;
-  }
+  
 
-  :host>>>.p-tabview .p-tabview-panels {
-    background-color: red;
-  }
+  .p-dropdown .p-dropdown-label.p-placeholder{
+         color: v-bind(textColor) !important;
+    }
 
   /* .p-tabmenu{
   background-color: aqua;

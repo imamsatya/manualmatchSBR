@@ -1,13 +1,19 @@
 <template>
     <div class="p-grid p-p-0 p-p-sm-1 p-p-md-2 p-p-lg-3 ">
-
+        <!-- {{this.currentUser()}} -->
+        <!-- <iframe src="https://embed.lottiefiles.com/animation/76498"></iframe> -->
+        <!-- {{kegiatanData.data.matching}} <br><br> -->
+        
+         <div :class="'p-col-12 p-lg-12 p-ml-2 p-mr-2 ' ">
+             <Breadcrumb :home="home" :model="items" />
+         </div>
         <div class="p-col-12 p-lg-12">
-            <Dropdown
+            <Dropdown v-if="kegiatanOptions !== null"
                 :class="'p-col-12 p-lg-12 '+myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
-                v-model="selectedCountry" :options="countries" optionLabel="name" :filter="true"
-                placeholder="Pilih Kegiatan" :showClear="true">
+                v-model="selectedKegiatan" :options="kegiatanOptions.data" optionLabel="name" :filter="true"
+                placeholder="Pilih Kegiatan" :showClear="true" @change="getKegiatanData(selectedKegiatan)" style="border-radius: 14px;">
                 <template #value="slotProps">
-                    <div class="country-item country-item-value" v-if="slotProps.value">
+                    <div class="data-item data-item-value" v-if="slotProps.value">
 
                         <div>{{slotProps.value.name}}</div>
                     </div>
@@ -16,7 +22,7 @@
                     </span>
                 </template>
                 <template #option="slotProps">
-                    <div class="country-item">
+                    <div class="data-item">
 
                         <div>{{slotProps.option.name}}</div>
                     </div>
@@ -24,8 +30,8 @@
             </Dropdown>
         </div>
         <!-- Matching Status -->
-        <div class="p-col-12 p-lg-6">
-
+        <div class="p-col-12 p-lg-6" v-if="this.kegiatanData !== null">
+ 
             <Card @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
                 :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
                 style="border-radius: 18px;">
@@ -39,7 +45,7 @@
                         <div class="p-col-5">
 
                             <div>
-                                <span style="font-size: 40px;"> 300.000 </span> <br>
+                                <span style="font-size: 40px;"> {{this.kegiatanData.data.matching.total}} </span> <br>
                                 Total
                             </div>
                         </div>
@@ -50,12 +56,12 @@
                         <div class="p-col-5">
 
                             <div>
-                                <span style="font-size: 40px;"> 150.000 </span> <br>
+                                <span style="font-size: 40px;"> {{this.kegiatanData.data.matching.complete}} </span> <br>
                                 Complete
                             </div>
                         </div>
                         <div class="p-col-12 p-mt-4">
-                            <ProgressBar style="color:white;" :value="50" />
+                            <ProgressBar style="color:white;" :value="((this.kegiatanData.data.matching.complete/this.kegiatanData.data.matching.total)*100).toFixed(2)" />
 
                         </div>
 
@@ -70,7 +76,7 @@
         </div>
 
         <!-- Assessment Status -->
-        <div class="p-col-12 p-lg-6">
+        <div class="p-col-12 p-lg-6" v-if="this.kegiatanData !== null">
 
             <Card @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
                 :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
@@ -85,7 +91,7 @@
                         <div class="p-col-5">
 
                             <div>
-                                <span style="font-size: 40px;"> 100.000 </span> <br>
+                                <span style="font-size: 40px;"> {{this.kegiatanData.data.assessment.total}} </span> <br>
                                 Total
                             </div>
                         </div>
@@ -96,12 +102,12 @@
                         <div class="p-col-5">
 
                             <div>
-                                <span style="font-size: 40px;"> 75.000 </span> <br>
+                                <span style="font-size: 40px;"> {{this.kegiatanData.data.assessment.complete}} </span> <br>
                                 Complete
                             </div>
                         </div>
                         <div class="p-col-12 p-mt-4">
-                            <ProgressBar :value="75" />
+                            <ProgressBar :value="((this.kegiatanData.data.assessment.complete/this.kegiatanData.data.assessment.total)*100).toFixed(2)" />
 
                         </div>
 
@@ -117,16 +123,16 @@
 
 
         <!-- Matching Assessment User -->
-        <div class="p-col-12 p-lg-12">
+        <div class="p-col-12 p-lg-12" v-if="kegiatanData !== null">
 
-            <DataTable :value="products" responsiveLayout="scroll"
+            <DataTable :value="kegiatanData.data.users" responsiveLayout="scroll"
                 :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
                 style="border-radius: 18px;">
                 <Column field="nama" header="Nama"></Column>
-                <Column field="totalMatching" header="Jumlah Matching"></Column>
-                <Column field="sisaMatching" header="Sisa Matching"></Column>
-                <Column field="totalAssessment" header="Jumlah Assessment"></Column>
-                <Column field="sisaAssessment" header="Sisa Assessment "></Column>
+                <Column field="jumlah_matching" header="Jumlah Matching"></Column>
+                <Column field="sisa_matching" header="Sisa Matching"></Column>
+                <Column field="jumlah_assessment" header="Jumlah Assessment"></Column>
+                <Column field="sisa_assessment" header="Sisa Assessment "></Column>
             </DataTable>
 
 
@@ -143,13 +149,21 @@
 
 <script scoped>
     import ProgressBar from 'primevue/progressbar'
+    import Breadcrumb from 'primevue/breadcrumb';
+import DataService from '../services/DataService';
     // import UserService from '../services/UserService'
     export default {
         components: {
-            ProgressBar
+            ProgressBar,
+            Breadcrumb
         },
         data() {
             return {
+                home: {icon: 'pi pi-home', to: '/'},
+            items: [
+                {label: 'Dashboard'},
+                
+            ],
                 myShadow: '',
                 products: [{
                         "id": "1000",
@@ -239,8 +253,32 @@
                         code: 'US'
                     }
                 ],
-                productService: null
+                productService: null,
+                headerBg: '#ffffff',
+                textColor: '#726b7c',
+                kegiatanOptions: null,
+                selectedKegiatan: null,
+                kegiatanData : null
             }
+        },
+        watch: {
+            myCardBgColorData(newX, oldX) {
+                console.log(`new ${newX}`)
+                if (newX == 'mydarkcardcolor') {
+                    this.headerBg = '#312d4b'
+                    this.textColor = '#cfcbe4'
+                } else {
+                    this.headerBg = '#ffffff'
+                    this.textColor = '#726b7c'
+                }
+                console.log(`old ${oldX}`)
+            },
+              myTextColorData() {
+                return this.$store.state.mainstyle.myTextColorData
+            },
+        },
+        async created(){
+           await this.getAllKegiatan()
         },
 
         computed: {
@@ -249,12 +287,59 @@
             },
             myTextColorData() {
                 return this.$store.state.mainstyle.myTextColorData
+            },
+            currentUser() {
+                return this.$store.state.auth.user
             }
         },
+        methods: {
+           async getAllKegiatan(){
+                await DataService.getKegiatanActive()
+                .then(response => {
+                    this.kegiatanOptions = response.data
+                    console.log('kegiatanOptions', this.kegiatanOptions)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+            async getKegiatanData(selectedKegiatan){
+                console.log(selectedKegiatan['id_kegiatan'])
+                await DataService.getKegiatanData(selectedKegiatan['id_kegiatan'])
+                .then(response => {
+                    this.kegiatanData = response.data
+                    console.log('KegiatanData', response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+        }
     }
 </script>
 
 <style lang="css" >
+
+    td {
+        background-color: v-bind(headerBg);
+        color: v-bind(textColor);
+    }
+
+    .p-datatable-thead {
+        background-color: v-bind(headerBg);
+        color: v-bind(textColor);
+    }
+
+    .p-paginator {
+        background-color: v-bind(headerBg);
+        color: v-bind(textColor);
+    }
+
+    .p-dropdown-label {
+        background-color: v-bind(headerBg);
+        color: v-bind(textColor);
+    }
+
     .buttonCompareActive {
         background-color: #9155fd;
         color: white;
@@ -265,14 +350,7 @@
         color: white;
     }
 
-    :host>>>.p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-state-active {
-        background-color: #d90096;
-        border: 1px solid #d600d9;
-    }
-
-    :host>>>.p-tabview .p-tabview-panels {
-        background-color: red;
-    }
+    
 
     .p-datatable-wrapper {
         border-radius: 18px;
@@ -281,6 +359,32 @@
     .p-progressbar .p-progressbar-label {
         color: white;
         line-height: 1.5rem;
+    }
+
+    .p-breadcrumb{
+        border: none;
+        border-radius: 14px;
+    }
+
+    nav{
+       background-color: v-bind(headerBg) !important;
+        color: v-bind(textColor) !important;
+    }
+
+    .p-menuitem-text{
+        color: v-bind(textColor) !important;
+    }
+
+    .p-breadcrumb ul li .p-breadcrumb-chevron{
+         color: v-bind(textColor) !important;
+    }
+
+    .p-breadcrumb ul li .p-menuitem-link .p-menuitem-icon{
+         color: v-bind(textColor) !important;
+    }
+
+    .p-dropdown .p-dropdown-label .p-placeholder {
+         color: v-bind(textColor) !important;
     }
 
     /* .p-tabmenu{

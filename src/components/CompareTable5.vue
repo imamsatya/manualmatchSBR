@@ -2,12 +2,37 @@
     <div>
 
         <div class="p-col-12 p-lg-12">
-            <Dropdown v-if="petugasOptions !== null"
+            <div :class="'p-col-12 p-lg-12 p-ml-2 p-mr-2 ' ">
+                <Breadcrumb :home="home" :model="items" />
+            </div>
+
+            <Dropdown v-if="kegiatanOptions !== null"
+                :class="'p-col-12 p-lg-12 '+myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
+                v-model="selectedKegiatan" :options="kegiatanOptions.data" optionLabel="name" :filter="true"
+                placeholder="Pilih Kegiatan" :showClear="true" @change="getUserData(currentUser.id)">
+                <template #value="slotProps">
+                    <div class="data-item data-item-value" v-if="slotProps.value">
+
+                        <div>{{slotProps.value.name}}</div>
+                    </div>
+                    <span v-else>
+                        {{slotProps.placeholder}}
+                    </span>
+                </template>
+                <template #option="slotProps">
+                    <div class="data-item">
+
+                        <div>{{slotProps.option.name}}</div>
+                    </div>
+                </template>
+            </Dropdown>
+
+            <!-- <Dropdown v-if="petugasOptions !== null"
                 :class="'p-col-12 p-lg-12 '+myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
                 v-model="selectedPetugas" :options="petugasOptions.data" optionLabel="nama" :filter="true"
                 placeholder="Pilih Petugas" :showClear="true" @change="getUserData(selectedPetugas['id'])">
                 <template #value="slotProps">
-                    <div class="country-item country-item-value" v-if="slotProps.value">
+                    <div class="data-item data-item-value" v-if="slotProps.value">
 
                         <div>{{slotProps.value.nama}}</div>
                     </div>
@@ -16,12 +41,12 @@
                     </span>
                 </template>
                 <template #option="slotProps">
-                    <div class="country-item">
+                    <div class="data-item">
 
                         <div>{{slotProps.option.nama}}</div>
                     </div>
                 </template>
-            </Dropdown>
+            </Dropdown> -->
         </div>
 
         <!-- <div v-if="this.data2View !== null && this.data3View !== null && this.selectedData !== null">
@@ -30,20 +55,51 @@
             </div>
 
         </div> -->
+        <div v-if="this.successMessage !== null">
+            <br><br>
+            <img src="../assets/matcha.png" class="hvr-bob mybob p-mt-1 " style="width: 30%; height: 18%;" alt=""
+                srcset="">
+            <br><br>
+            <h1>Selamat. Kamu sudah selesai Assessment</h1>
+            <h3> Ayo kerja lagi.</h3>
+            <p style="font-style: italic; ">
+                <span>So little time, so <span style="font-weight: 900;color:#78b34d"> MatchA </span> to do</span></p>
 
+        </div>
+        <div v-if="this.errorMessages.length !== 0">
+            <br><br>
+            <img src="../assets/matcha404.png" class="hvr-bob mybob p-mt-1 " style="width: 30%; height: 18%;" alt=""
+                srcset="">
+            <br><br>
+            <h1>Aww...Jangan Nangis.</h1>
+            <h3>Ini cuma error kecil! Ayo kerja lagi.</h3>
+            <p style="font-style: italic; ">
+                <span>So little time, so <span style="font-weight: 900;color:#78b34d"> MatchA </span> to do</span></p>
+            <!-- <Message v-for="(error) in this.errorMessages" v-bind:key="error" severity="error">{{error}}</Message> -->
+        </div>
+        <div class="p-grid p-jc-center">
+            <iframe v-if="this.transposedData == null && this.errorMessages.length == 0 && this.successMessage == null"
+                src="https://embed.lottiefiles.com/animation/107059" style="max-height:100%; overflow: auto;"
+                class="p-mt-4" width="500" height="500" frameBorder="0"></iframe>
+        </div>
 
         <div v-if="this.transposedData !== null">
+            <!-- Data SBR ({{Object.keys(this.data2View[0]).length}}) : {{this.data2View[0]}}
+            <br><br>
+            Data Assess ({{Object.keys(this.datas2nd[0]).length}}) : {{this.datas2nd}} <br><br> -->
+
+            <!-- Tes: {{datas2nd[0]['aktivitas_perusahaan'][0].id}} -->
 
             <div class="p-col-12 p-lg-12">
                 <Card @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
                     :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
-                    style="border-radius: 18px;">
+                    style="border-radius: 14px;">
                     <template #title>
                         Progress
                     </template>
                     <template #content>
                         <div class="p-grid p-jc-center " style=" border-left-color: red; ">
-                            <div class="p-col-3 p-lg-3 p-md-12 p-sm-12">
+                            <div class="p-col-12 p-lg-3 p-md-12 p-sm-12">
                                 <div>
                                     <span style="font-size: 40px;"> {{userSummary['belum_assessment']}} </span> <br>
                                     Belum Assessment
@@ -52,7 +108,7 @@
                             <div class="p-col-1">
                                 <Divider layout="vertical" />
                             </div>
-                            <div class="p-col-3 p-lg-3 p-md-12 p-sm-12">
+                            <div class="p-col-12 p-lg-3 p-md-12 p-sm-12">
                                 <div>
                                     <span style="font-size: 40px;"> {{userSummary['sudah_assessment']}} </span> <br>
                                     Sudah Assessment
@@ -61,7 +117,7 @@
                             <div class="p-col-1">
                                 <Divider layout="vertical" />
                             </div>
-                            <div class="p-col-3 p-lg-3 p-md-12 p-sm-12">
+                            <div class="p-col-12 p-lg-3 p-md-12 p-sm-12">
                                 <div>
                                     <span style="font-size: 40px;"> {{userSummary['total_data_assessment']}} </span>
                                     <br>
@@ -70,7 +126,7 @@
                             </div>
                             <div class="p-col-12 p-mt-4">
                                 <ProgressBar style="color:white;"
-                                    :value="(userSummary['sudah_assessment']/userSummary['total_data_assessment'])*100" />
+                                    :value="((userSummary['sudah_assessment']/userSummary['total_data_assessment'])*100).toFixed(2)" />
                                 <!-- <ProgressBar style="color:white;" :value="(2/3*100).toFixed(2)" /> -->
                             </div>
                         </div>
@@ -97,24 +153,43 @@
                 headerStyle="width:3em;">
                 <template #body="slotProps">
 
-                    <div v-if="slotProps.data.variabel != 'telepon' &&
-                    slotProps.data.variabel != 'email' &&
-                    slotProps.data.variabel != 'fax' &&
-                    slotProps.data.variabel != 'website'">
+                    <div v-if="slotProps.data.variabel !== 'produk_perusahaan' &&
+                    slotProps.data.variabel !== 'aktivitas_perusahaan' &&
+                    slotProps.data.variabel !== 'pemegang_saham' &&
+                    slotProps.data.variabel !== 'alamat_email_perusahaan' && 
+                    slotProps.data.variabel !== 'alamat_fax_perusahaan' &&
+                    slotProps.data.variabel !== 'alamat_telepon_perusahaan' &&
+                    slotProps.data.variabel !== 'alamat_web_perusahaan' &&
+                    slotProps.data.variabel !== 'kontak_perusahaan'">
                         <RadioButton :id="slotProps.variabel" name="item2" :value="slotProps.data.value"
                             v-model="selectedData[Object.keys(this.data2View[0])[slotProps.index]]" />
-                        <label
+                        <label v-if="typeof slotProps.data.value !== 'object'"
                             @click="selectedData[Object.keys(this.data2View[0])[slotProps.index]] = slotProps.data.value"
                             class="p-ml-2">
                             <!-- @dblclick="editValue2(selectedData[Object.keys(this.data2View[0])[slotProps.index]], slotProps, 'sumber'+(index2))" -->
                             {{slotProps.data.value}}
+
+                        </label>
+                        <label
+                            @click="selectedData[Object.keys(this.data2View[0])[slotProps.index]] = slotProps.data.value"
+                            for="" v-if="typeof slotProps.data.value == 'object' && slotProps.data.value !== null">
+                            <div v-for="(item2, index2) in slotProps.data.value" :key="item2">
+                                <div v-if="index2.substring(index2.length - 3) !== '_id'">
+                                    {{index2.substring(index2.length - 4)}} : {{item2}} <br>
+                                </div>
+                            </div>
+
                         </label>
                     </div>
 
-                    <div v-if="slotProps.data.variabel == 'telepon' ||
-                    slotProps.data.variabel == 'email' ||
-                    slotProps.data.variabel == 'fax' ||
-                    slotProps.data.variabel == 'website'">
+                    <div v-if="slotProps.data.variabel == 'produk_perusahaan' ||
+                    slotProps.data.variabel == 'aktivitas_perusahaan' ||
+                    slotProps.data.variabel == 'pemegang_saham' ||
+                    slotProps.data.variabel == 'alamat_email_perusahaan' || 
+                    slotProps.data.variabel == 'alamat_fax_perusahaan' ||
+                    slotProps.data.variabel == 'alamat_telepon_perusahaan' ||
+                    slotProps.data.variabel == 'alamat_web_perusahaan' ||
+                    slotProps.data.variabel == 'kontak_perusahaan'">
                         <div>
                             <!-- <RadioButton :id="slotProps.index" name="item2" :value="slotProps.data.value"
                                 v-model="selectedData[Object.keys(this.data2View[0])[slotProps.index]]" />
@@ -144,22 +219,40 @@
                 <Column :field="'sumber'+(index2)" :class="myCardBgColorData+' '+myTextColorData"
                     :header="'sumber '+(index2) " headerStyle="width:3em;">
                     <template #body="slotProps">
-                        <div v-if="slotProps.data.variabel !== 'telepon' &&
-                                slotProps.data.variabel != 'email' &&
-                                slotProps.data.variabel != 'fax' &&
-                                slotProps.data.variabel != 'website'">
+                        <div v-if="slotProps.data.variabel !== 'produk_perusahaan' &&
+                    slotProps.data.variabel !== 'aktivitas_perusahaan' &&
+                    slotProps.data.variabel !== 'pemegang_saham' &&
+                    slotProps.data.variabel !== 'alamat_email_perusahaan' && 
+                    slotProps.data.variabel !== 'alamat_fax_perusahaan' &&
+                    slotProps.data.variabel !== 'alamat_telepon_perusahaan' &&
+                    slotProps.data.variabel !== 'alamat_web_perusahaan' &&
+                    slotProps.data.variabel !== 'kontak_perusahaan'">
                             <RadioButton :id="slotProps.index" name="item2" :value="slotProps.data['sumber'+index2]"
                                 v-model="selectedData[Object.keys(this.data2View[0])[slotProps.index]]" />
-                            <label
+                            <label v-if="typeof slotProps.data.value !== 'object'"
                                 @click="selectedData[Object.keys(this.data2View[0])[slotProps.index]] = slotProps.data['sumber'+index2] "
                                 for="slotProps.index" class="p-ml-2">{{slotProps.data['sumber'+index2]}}
                             </label>
+                            <label
+                                @click="selectedData[Object.keys(this.data2View[0])[slotProps.index]] = slotProps.data['sumber'+index2] "
+                                for="" v-if="typeof slotProps.data.value == 'object' && slotProps.data.value !== null">
+                                <div v-for="(item2, index2) in slotProps.data['sumber'+index2]" :key="item2">
+                                    <div v-if="index2.substring(index2.length - 3) !== '_id'">
+                                        {{index2.substring(index2.length - 4)}} : {{item2}} <br>
+                                    </div>
+                                </div>
+
+                            </label>
                         </div>
 
-                        <div v-if="slotProps.data.variabel == 'telepon' ||
-                            slotProps.data.variabel == 'email' ||
-                            slotProps.data.variabel == 'fax' ||
-                            slotProps.data.variabel == 'website'">
+                        <div v-if="slotProps.data.variabel == 'produk_perusahaan' ||
+                    slotProps.data.variabel == 'aktivitas_perusahaan' ||
+                    slotProps.data.variabel == 'pemegang_saham' ||
+                    slotProps.data.variabel == 'alamat_email_perusahaan' || 
+                    slotProps.data.variabel == 'alamat_fax_perusahaan' ||
+                    slotProps.data.variabel == 'alamat_telepon_perusahaan' ||
+                    slotProps.data.variabel == 'alamat_web_perusahaan' ||
+                    slotProps.data.variabel == 'kontak_perusahaan'">
 
                             <!-- <RadioButton :id="slotProps.index" name="item2" :value="slotProps.data['sumber'+index2]"
                                 v-model="selectedData[Object.keys(this.data2View[0])[slotProps.index]]" />
@@ -181,22 +274,44 @@
 
             <Column :class="myCardBgColorData+' '+myTextColorData" header="Selected Value" headerStyle="width:3em;">
                 <template #body="slotProps">
-                    <div v-if="slotProps.data.variabel !== 'telepon' &&
-                    slotProps.data.variabel != 'email' &&
-                    slotProps.data.variabel != 'fax' &&
-                    slotProps.data.variabel != 'website'"
+                    <div v-if="slotProps.data.variabel !== 'produk_perusahaan' &&
+                    slotProps.data.variabel !== 'aktivitas_perusahaan' &&
+                    slotProps.data.variabel !== 'pemegang_saham' &&
+                    slotProps.data.variabel !== 'alamat_email_perusahaan' && 
+                    slotProps.data.variabel !== 'alamat_fax_perusahaan' &&
+                    slotProps.data.variabel !== 'alamat_telepon_perusahaan' &&
+                    slotProps.data.variabel !== 'alamat_web_perusahaan' &&
+                    slotProps.data.variabel !== 'kontak_perusahaan'"
                         @dblclick="editValueSelected(selectedData[Object.keys(this.data2View[0])[slotProps.index]], slotProps)">
-                        {{selectedData[Object.keys(this.data2View[0])[slotProps.index]]}}
+                        <div
+                            v-if="typeof selectedData[Object.keys(this.data2View[0])[slotProps.index]] == 'object' && selectedData[Object.keys(this.data2View[0])[slotProps.index]] !== null">
+                            <div v-for="(item2, index2) in selectedData[Object.keys(this.data2View[0])[slotProps.index]]"
+                                :key="item2">
+                                <div v-if="index2.substring(index2.length - 3) !== '_id'">
+                                    {{index2.substring(index2.length - 4)}} : {{item2}} <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            {{selectedData[Object.keys(this.data2View[0])[slotProps.index]]}}
+                        </div>
+
                         <div @dblclick="editValueSelected(selectedData[Object.keys(this.data2View[0])[slotProps.index]], slotProps)"
                             v-if="selectedData[Object.keys(this.data2View[0])[slotProps.index]] == null">
                             &nbsp;
                         </div>
+
+
                     </div>
                     <div @dblclick="editValueSelected(selectedData[Object.keys(this.data2View[0])[slotProps.index]], slotProps)"
-                        v-if="slotProps.data.variabel == 'telepon' ||
-                    slotProps.data.variabel == 'email' ||
-                    slotProps.data.variabel == 'fax' ||
-                    slotProps.data.variabel == 'website'">
+                        v-if="slotProps.data.variabel == 'produk_perusahaan' ||
+                    slotProps.data.variabel == 'aktivitas_perusahaan' ||
+                    slotProps.data.variabel == 'pemegang_saham' ||
+                    slotProps.data.variabel == 'alamat_email_perusahaan' || 
+                    slotProps.data.variabel == 'alamat_fax_perusahaan' ||
+                    slotProps.data.variabel == 'alamat_telepon_perusahaan' ||
+                    slotProps.data.variabel == 'alamat_web_perusahaan' ||
+                    slotProps.data.variabel == 'kontak_perusahaan'">
                         <div v-if="selectedData[Object.keys(this.data2View[0])[slotProps.index]]  !== null">
 
 
@@ -213,7 +328,7 @@
                                 </div>
                             </div>
                             <div v-else>
-                                <div v-for="(item,index) in selectedData[Object.keys(this.data2View[0])[slotProps.index]]"
+                                <div v-for="(item,index) in selectedData[Object.keys(this.data2View[0])[slotProps.index]][0]"
                                     :key="item">
                                     {{index}} : {{item}} <br>
                                 </div>
@@ -231,6 +346,7 @@
         <Dialog header="Select Data" v-model:visible="displayDialogObject" :style="{width: '50vw'}" :maximizable="true"
             :modal="true">
             <p class="m-0">
+
                 <DataTable :value="display2ndVariabel" responsiveLayout="scroll">
                     <template #header>
                         <div class="flex justify-content-center align-items-center">
@@ -245,7 +361,11 @@
                     </Column>
                     <template v-if="this.display2ndVariabel.length !== 0">
                         <template v-for="mykey in Object.keys(display2ndVariabel[0])" :key="mykey">
-                            <Column style="width:25%" :field="mykey" :header="mykey"></Column>
+                            <Column style="width:25%" :field="mykey" :header="mykey">
+                                <!-- <template #body="slotProps">
+                             {{slotProps.data[0].id}}
+                        </template> -->
+                            </Column>
                         </template>
                     </template>
                     <Column style="width:25%" header="Action">
@@ -315,7 +435,7 @@
                 <div v-else>
                     <div v-for="(mykey, index) in editedValue" :key="mykey">
                         <div v-for="(mykey2) in Object.keys(mykey)" :key="mykey2">
-                            {{mykey2}}{{' '+(index+1)}}
+                            {{mykey2}}
                             <InputText style="width:100%;" v-model="editedValue[index][mykey2]" />
                         </div>
                         <br>
@@ -347,15 +467,19 @@
             <div v-if="(typeof editedValue == 'object')">
                 <div v-if="editedValue.length == null">
                     <div v-for="mykey in Object.keys(editedValue)" :key="mykey">
-                        {{mykey}} :
-                        <InputText style="width:100%;" v-model="editedValue[mykey]" />
+                        <div v-if="mykey.substring(mykey.length - 3) !== '_id' && mykey !== 'id'">
+                            {{mykey}} :
+                            <InputText style="width:100%;" v-model="editedValue[mykey]" />
+                        </div>
                     </div>
                 </div>
                 <div v-else>
                     <div v-for="(mykey, index) in editedValue" :key="mykey">
                         <div v-for="(mykey2) in Object.keys(mykey)" :key="mykey2">
-                            {{mykey2}}{{' '+(index+1)}}
-                            <InputText style="width:100%;" v-model="editedValue[index][mykey2]" />
+                            <div v-if="mykey2.substring(mykey2.length - 3) !== '_id' && mykey2 !== 'id'">
+                                {{mykey2}}
+                                <InputText style="width:100%;" v-model="editedValue[index][mykey2]" />
+                            </div>
                         </div>
                         <br>
                     </div>
@@ -411,29 +535,36 @@
             </template>
         </Dialog>
 
-        <Dialog header="Mohon Menunggu" v-model:visible="loadingDialog" :style="{width: '30vw'}" :modal="true">
-            <div class="p-grid p-jc-center ">
-                <ProgressSpinner />
-            </div>
-        </Dialog>
 
 
 
-        <br><br>
+
         <div v-if="this.errorMessages.length !== 0">
+
+            <br><br>
             <Message v-for="(error) in this.errorMessages" v-bind:key="error" severity="error">{{error}}</Message>
         </div>
 
-        <br><br>
+        <br>
 
-        <Button label="Submit" icon="" class="p-mb-2 p-ripple" @click="submit()" /> <br>
+        <Button label="Submit" style="font-weight: 900;border-radius: 14px;" v-if="transposedData !== null" icon=""
+            class="p-col-10 p-mb-2 p-ripple p-button-lg p-button-rounded" @click="submit()" /> <br>
         <Toast />
+
+        <Loading v-model:active="loadingDialog" :is-full-page="true" :color="'#86d166'" :background-color="'black'"
+            :opacity="0.7">
+            <slot>
+
+                <MyLoading></MyLoading>
+            </slot>
+        </Loading>
         <!-- {{selectedData}} -->
 
     </div>
 </template>
 <script>
     import DataService from '../services/DataService'
+    import dummy from '../services/dummy'
     import RadioButton from 'primevue/radiobutton'
     import InputText from 'primevue/inputtext'
     import Toast from 'primevue/toast'
@@ -441,7 +572,12 @@
     import ProgressBar from 'primevue/progressbar'
     import Message from 'primevue/message'
     import Toolbar from 'primevue/toolbar'
-    import ProgressSpinner from 'primevue/progressspinner';
+    import Breadcrumb from 'primevue/breadcrumb';
+
+    import MyLoading from '../components/MyLoading.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
 
 
 
@@ -455,7 +591,7 @@
             // CompareTable: () => import('../components/CompareTable.vue')
 
             // Paginator,
-            ProgressSpinner,
+
             InputText,
             ProgressBar,
             Message,
@@ -463,7 +599,10 @@
             RadioButton,
             Dialog,
             Toast,
-            Toolbar
+            Toolbar,
+            Breadcrumb,
+            MyLoading,
+            Loading
 
 
 
@@ -471,10 +610,23 @@
         },
         data() {
             return {
+                home: {
+                    icon: 'pi pi-home',
+                    // to: '/'
+                },
+                items: [{
+                        label: 'Assessment'
+                    },
+
+                ],
+                idAlokasi: null,
+                idPerusahaan: null,
+                selectedKegiatan: null,
+                kegiatanOptions: null,
                 loadingDialog: false,
                 currentId: null,
                 openNew: false,
-                errorMessages: [],
+
                 displayKey: null,
                 display2ndVariabel: null,
                 displayVariabel: [],
@@ -494,13 +646,29 @@
                 datas2nd: null,
                 input2: null,
                 transposedData: null,
+                // tablestyle
+                headerBg: '#ffffff',
+                textColor: '#726b7c',
+                //error
+                errorMessages: [],
+                successMessage: null
+
             }
         },
         async created() {
-            await DataService.getPetugas()
+            // await DataService.getPetugas()
+            //     .then(response => {
+            //         this.petugasOptions = response.data
+            //         console.log('petugasOptions', this.petugasOptions.data)
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //     })
+
+            await DataService.getKegiatanActiveAssessment()
                 .then(response => {
-                    this.petugasOptions = response.data
-                    console.log('petugasOptions', this.petugasOptions.data)
+                    this.kegiatanOptions = response.data
+                    console.log('kegiatanOptions', this.kegiatanOptions)
                 })
                 .catch(error => {
                     console.log(error)
@@ -531,6 +699,23 @@
             //         console.log(error)
             //     })
         },
+        watch: {
+            myCardBgColorData(newX, oldX) {
+                console.log(`new ${newX}`)
+                if (newX == 'mydarkcardcolor') {
+                    this.headerBg = '#312d4b'
+                    this.textColor = '#cfcbe4'
+
+                } else {
+                    this.headerBg = '#ffffff'
+                    this.textColor = '#726b7c'
+
+                }
+                console.log(`old ${oldX}`)
+            },
+
+
+        },
         computed: {
             myCardBgColorData() {
                 return this.$store.state.mainstyle.myCardBgColorData
@@ -540,6 +725,9 @@
             },
             mySelectedData() {
                 return this.$store.state.compareTable.mySelectedData
+            },
+            currentUser() {
+                return this.$store.state.auth.user
             }
         },
         methods: {
@@ -574,6 +762,7 @@
 
             },
             openDialogObject(data) {
+                console.log('arrayData', data)
                 console.log('data.data.value', data.data.value)
                 this.displayVariabel = data.data.value
                 this.displayKey = data.data.variabel
@@ -588,35 +777,67 @@
                 }
                 console.log('theData', data)
                 this.display2ndVariabel = []
-                if (data.data.variabel == 'telepon') {
+                if (data.data.variabel == 'produk_perusahaan') {
                     for (let index = 0; index < this.datas2nd.length; index++) {
                         console.log('index', index)
-                        console.log('dataIndex', this.datas2nd[0]['no_telepon'])
-                        this.display2ndVariabel.push(this.datas2nd[index]['no_telepon'])
+                        console.log('dataIndex', this.datas2nd[0]['produk_perusahaan'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['produk_perusahaan'])
                     }
                 }
 
-                if (data.data.variabel == 'fax') {
+                if (data.data.variabel == 'aktivitas_perusahaan') {
                     for (let index = 0; index < this.datas2nd.length; index++) {
                         console.log('index', index)
-                        console.log('dataIndex', this.datas2nd[0]['no_fax'])
-                        this.display2ndVariabel.push(this.datas2nd[index]['no_fax'])
+                        console.log('dataIndex', this.datas2nd[0]['aktivitas_perusahaan'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['aktivitas_perusahaan'])
                     }
                 }
 
-                if (data.data.variabel == 'email') {
+                if (data.data.variabel == 'pemegang_saham') {
                     for (let index = 0; index < this.datas2nd.length; index++) {
                         console.log('index', index)
-                        console.log('dataIndex', this.datas2nd[0]['email'])
-                        this.display2ndVariabel.push(this.datas2nd[index]['email'])
+                        console.log('dataIndex', this.datas2nd[0]['pemegang_saham'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['pemegang_saham'])
                     }
                 }
 
-                if (data.data.variabel == 'website') {
+                if (data.data.variabel == 'alamat_email_perusahaan') {
                     for (let index = 0; index < this.datas2nd.length; index++) {
                         console.log('index', index)
-                        console.log('dataIndex', this.datas2nd[0]['website'])
-                        this.display2ndVariabel.push(this.datas2nd[index]['website'])
+                        console.log('dataIndex', this.datas2nd[0]['alamat_email_perusahaan'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['alamat_email_perusahaan'])
+                    }
+                }
+
+                if (data.data.variabel == 'alamat_fax_perusahaan') {
+                    for (let index = 0; index < this.datas2nd.length; index++) {
+                        console.log('index', index)
+                        console.log('dataIndex', this.datas2nd[0]['alamat_fax_perusahaan'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['alamat_fax_perusahaan'])
+                    }
+                }
+
+                if (data.data.variabel == 'alamat_web_perusahaan') {
+                    for (let index = 0; index < this.datas2nd.length; index++) {
+                        console.log('index', index)
+                        console.log('dataIndex', this.datas2nd[0]['alamat_web_perusahaan'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['alamat_web_perusahaan'])
+                    }
+                }
+
+                if (data.data.variabel == 'alamat_telepon_perusahaan') {
+                    for (let index = 0; index < this.datas2nd.length; index++) {
+                        console.log('index', index)
+                        console.log('dataIndex', this.datas2nd[0]['alamat_telepon_perusahaan'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['alamat_telepon_perusahaan'])
+                    }
+                }
+
+                if (data.data.variabel == 'kontak_perusahaan') {
+                    for (let index = 0; index < this.datas2nd.length; index++) {
+                        console.log('index', index)
+                        console.log('dataIndex', this.datas2nd[0]['kontak_perusahaan'])
+                        this.display2ndVariabel.push(this.datas2nd[index]['kontak_perusahaan'])
                     }
                 }
 
@@ -627,57 +848,52 @@
                 console.log('display Variabel', this.displayVariabel)
             },
             async getDataSBR() {
-                await DataService.getDataSBR(this.currentId)
+                this.loadingDialog = true
+                await DataService.getDataAssessment(this.selectedKegiatan.id_kegiatan, this.currentId)
                     .then(response => {
-                        var x = response.data
-                        console.log('response.data', x)
-                        console.log('SBR', x.data.data_sbr)
-                        this.data2View[0] = x.data.data_sbr
-                        this.userSummary = x.data.summary
-                        delete this.data2View[0]['tabel']
-                        this.datas2nd = x.data.data_assessment
-                        delete this.datas2nd[0]['id_spool']
+                        var data = response.data
 
-                        for (let index = 0; index < this.datas2nd.length; index++) {
-                            // const element = array[index];
-                            delete this.datas2nd[index]['id_spool']
+                        //untuk dummy
+                        data = dummy
+                        data = response.data
+                        if (response.data.data.summary.sudah_assessment == response.data.data.summary
+                            .total_data_assessment) {
+                            this.errorMessages = []
+                            this.successMessage = "Selamat. Kamu sudah selesai Assessment"
+                            this.transposedData = null
+                            this.datas2nd = null
+                            this.loadingDialog = false
+                        } else {
+                            console.log('response.data', data)
+                            console.log('SBR', data.data.data_sbr)
+                            this.data2View[0] = data.data.data_sbr
+                            this.userSummary = data.data.summary
 
-                            this.datas2nd[index]['no_telepon'] = {
-                                "ekstensi": this.datas2nd[index]['ekstensi'],
-                                "no_telepon": this.datas2nd[index]['no_telepon'],
+                            //Fungsi EditKey
+                            this.editKey(data)
 
-                            }
-                            this.datas2nd[index]['no_fax'] = {
-                                "no_fax": this.datas2nd[index]['no_fax']
-                            }
-                            this.datas2nd[index]['email'] = {
-                                "email": this.datas2nd[index]['email']
-                            }
-                            this.datas2nd[index]['website'] = {
-                                "website": this.datas2nd[index]['website']
-                            }
-                            delete this.datas2nd[index]['ekstensi']
-                            // delete this.datas2nd[index]['no_fax']
+                            var thekeys = Object.keys(this.data2View[0])
+                            var myObj = {}
+                            thekeys.forEach(element => {
+                                myObj[element] = null
+                            });
+
+                            this.selectedData = myObj
+                            console.log('created selectedData', this.selectedData)
+                            this.transpose(this.data2View[0])
+                            this.errorMessages = []
+                            this.successMessage = null
+                            this.loadingDialog = false
                         }
 
-                        // delete this.datas2nd[0]['id_spool']
-                        // delete this.datas2nd[1]['id_spool']
-                        // delete this.datas2nd[0]['ekstensi']
-                        // delete this.datas2nd[1]['ekstensi']
-
-
-                        var thekeys = Object.keys(this.data2View[0])
-                        var myObj = {}
-                        thekeys.forEach(element => {
-                            myObj[element] = null
-                        });
-
-                        this.selectedData = myObj
-                        console.log('created selectedData', this.selectedData)
-                        this.transpose(this.data2View[0])
                     })
                     .catch(error => {
                         console.log(error)
+                        this.transposedData = null
+                        this.datas2nd = null
+                        this.successMessage = null
+                        this.errorMessages.push(error.response.data.meta.message)
+                        this.loadingDialog = false
                     })
             },
             async getUserData($id) {
@@ -763,6 +979,490 @@
                 //     })
                 // console.table('datas2nd', this.datas2nd)
             },
+            editKey(data) {
+
+                //Data SBR => data2View[0]
+                //Data Sumber => datas2nd
+
+                // delete this.data2View[0]['tabel']
+                this.datas2nd = data.data.data_assessment
+                console.log('jumlah jenis data', this.datas2nd.length)
+                // delete this.datas2nd[0]['id_spool']
+
+                //idAlokasi
+                this.idAlokasi = data.data.id_alokasi
+                //idPerusahaan
+                this.idPerusahaan = data.data.data_sbr.id_perusahaan
+                delete this.data2View[0].id_perusahaan
+
+                // //nama_wilayah
+                // this.data2View[0]['nama_wilayah'] = {
+                //     "negara_id": this.data2View[0]['negara_id'],
+                //     "negara_kode": this.data2View[0]['negara_kode'],
+                //     "negara_nama": this.data2View[0]['negara_nama'],
+                //     "provinsi_id": this.data2View[0]['provinsi_id'],
+                //     "provinsi_kode": this.data2View[0]['provinsi_kode'],
+                //     "provinsi_nama": this.data2View[0]['provinsi_nama'],
+                //     "kabupaten_kota_id": this.data2View[0]['kabupaten_kota_id'],
+                //     "kabupaten_kota_kode": this.data2View[0]['kabupaten_kota_kode'],
+                //     "kabupaten_kota_nama": this.data2View[0]['kabupaten_kota_nama'],
+                //     "kecamatan_id": this.data2View[0]['kecamatan_id'],
+                //     "kecamatan_kode": this.data2View[0]['kecamatan_kode'],
+                //     "kecamatan_nama": this.data2View[0]['kecamatan_nama'],
+                //     "kelurahan_desa_id": this.data2View[0]['kelurahan_desa_id'],
+                //     "kelurahan_desa_kode": this.data2View[0]['kelurahan_desa_kode'],
+                //     "kelurahan_desa_nama": this.data2View[0]['kelurahan_desa_nama'],
+                // }
+                // delete this.data2View[0]['negara_id']
+                // delete this.data2View[0]['negara_kode']
+                // delete this.data2View[0]['negara_nama']
+                // delete this.data2View[0]['provinsi_id']
+                // delete this.data2View[0]['provinsi_kode']
+                // delete this.data2View[0]['provinsi_nama']
+                // delete this.data2View[0]['kabupaten_kota_id']
+                // delete this.data2View[0]['kabupaten_kota_kode']
+                // delete this.data2View[0]['kabupaten_kota_nama']
+                // delete this.data2View[0]['kecamatan_id']
+                // delete this.data2View[0]['kecamatan_kode']
+                // delete this.data2View[0]['kecamatan_nama']
+                // delete this.data2View[0]['kelurahan_desa_id']
+                // delete this.data2View[0]['kelurahan_desa_kode']
+                // delete this.data2View[0]['kelurahan_desa_nama']
+
+                //negara
+                this.data2View[0]['negara'] = {
+                    "negara_id": this.data2View[0]['negara_id'],
+                    "negara_kode": this.data2View[0]['negara_kode'],
+                    "negara_nama": this.data2View[0]['negara_nama'],
+                }
+                delete this.data2View[0]['negara_id']
+                delete this.data2View[0]['negara_kode']
+                delete this.data2View[0]['negara_nama']
+
+                //provinsi
+                this.data2View[0]['provinsi'] = {
+                    "provinsi_id": this.data2View[0]['provinsi_id'],
+                    "provinsi_kode": this.data2View[0]['provinsi_kode'],
+                    "provinsi_nama": this.data2View[0]['provinsi_nama'],
+                }
+                delete this.data2View[0]['provinsi_id']
+                delete this.data2View[0]['provinsi_kode']
+                delete this.data2View[0]['provinsi_nama']
+
+                //kabupaten_kota
+                this.data2View[0]['kabupaten_kota'] = {
+                    "kabupaten_kota_id": this.data2View[0]['kabupaten_kota_id'],
+                    "kabupaten_kota_kode": this.data2View[0]['kabupaten_kota_kode'],
+                    "kabupaten_kota_nama": this.data2View[0]['kabupaten_kota_nama'],
+                }
+                delete this.data2View[0]['kabupaten_kota_id']
+                delete this.data2View[0]['kabupaten_kota_kode']
+                delete this.data2View[0]['kabupaten_kota_nama']
+
+                //kecamtan
+                this.data2View[0]['kecamatan'] = {
+                    "kecamatan_id": this.data2View[0]['kecamatan_id'],
+                    "kecamatan_kode": this.data2View[0]['kecamatan_kode'],
+                    "kecamatan_nama": this.data2View[0]['kecamatan_nama'],
+                }
+                delete this.data2View[0]['kecamatan_id']
+                delete this.data2View[0]['kecamatan_kode']
+                delete this.data2View[0]['kecamatan_nama']
+
+                //kelurahan
+                this.data2View[0]['kelurahan_desa'] = {
+                    "kelurahan_desa_id": this.data2View[0]['kelurahan_desa_id'],
+                    "kelurahan_desa_kode": this.data2View[0]['kelurahan_desa_kode'],
+                    "kelurahan_desa_nama": this.data2View[0]['kelurahan_desa_nama'],
+                }
+                delete this.data2View[0]['kelurahan_desa_id']
+                delete this.data2View[0]['kelurahan_desa_kode']
+                delete this.data2View[0]['kelurahan_desa_nama']
+
+                //jaringan_usaha
+                this.data2View[0]['jaringan_usaha'] = {
+                    "jaringan_usaha_id": this.data2View[0]['jaringan_usaha_id'],
+                    "jaringan_usaha_kode": this.data2View[0]['jaringan_usaha_kode'],
+                    "jaringan_usaha_nama": this.data2View[0]['jaringan_usaha_nama'],
+                }
+                delete this.data2View[0]['jaringan_usaha_id']
+                delete this.data2View[0]['jaringan_usaha_kode']
+                delete this.data2View[0]['jaringan_usaha_nama']
+
+                //jenis_badan_hukum_badan_usaha
+                this.data2View[0]['jenis_badan_hukum_badan_usaha'] = {
+                    "jenis_badan_hukum_badan_usaha_id": this.data2View[0]['jenis_badan_hukum_badan_usaha_id'],
+                    "jenis_badan_hukum_badan_usaha_kode": this.data2View[0]['jenis_badan_hukum_badan_usaha_kode'],
+                    "jenis_badan_hukum_badan_usaha_nama": this.data2View[0]['jenis_badan_hukum_badan_usaha_nama'],
+                }
+                delete this.data2View[0]['jenis_badan_hukum_badan_usaha_id']
+                delete this.data2View[0]['jenis_badan_hukum_badan_usaha_kode']
+                delete this.data2View[0]['jenis_badan_hukum_badan_usaha_nama']
+
+                //kbji_pengusaha
+                this.data2View[0]['kbji_pengusaha'] = {
+                    "kbji_pengusaha_id": this.data2View[0]['kbji_pengusaha_id'],
+                    "kbji_pengusaha_kode": this.data2View[0]['kbji_pengusaha_kode'],
+                    "kbji_pengusaha_nama": this.data2View[0]['kbji_pengusaha_nama'],
+                }
+                delete this.data2View[0]['kbji_pengusaha_id']
+                delete this.data2View[0]['kbji_pengusaha_kode']
+                delete this.data2View[0]['kbji_pengusaha_nama']
+
+                //kewarganegaraan_pengusaha
+                this.data2View[0]['kewarganegaraan_pengusaha'] = {
+                    "kewarganegaraan_pengusaha_id": this.data2View[0]['kewarganegaraan_pengusaha_id'],
+                    "kewarganegaraan_pengusaha_kode": this.data2View[0]['kewarganegaraan_pengusaha_kode'],
+                    "kewarganegaraan_pengusaha_nama": this.data2View[0]['kewarganegaraan_pengusaha_nama'],
+                }
+                delete this.data2View[0]['kewarganegaraan_pengusaha_id']
+                delete this.data2View[0]['kewarganegaraan_pengusaha_kode']
+                delete this.data2View[0]['kewarganegaraan_pengusaha_nama']
+
+                //pajak_jeniswp
+                this.data2View[0]['pajak_jeniswp'] = {
+                    "pajak_jeniswp_id": this.data2View[0]['pajak_jeniswp_id'],
+                    "pajak_jeniswp_kode": this.data2View[0]['pajak_jeniswp_kode'],
+                    "pajak_jeniswp_nama": this.data2View[0]['pajak_jeniswp_nama'],
+                }
+                delete this.data2View[0]['pajak_jeniswp_id']
+                delete this.data2View[0]['pajak_jeniswp_kode']
+                delete this.data2View[0]['pajak_jeniswp_nama']
+
+                //pajak_skala_usaha
+                this.data2View[0]['pajak_skala_usaha'] = {
+                    "pajak_skala_usaha_id": this.data2View[0]['pajak_skala_usaha_id'],
+                    "pajak_skala_usaha_kode": this.data2View[0]['pajak_skala_usaha_kode'],
+                    "pajak_skala_usaha_nama": this.data2View[0]['pajak_skala_usaha_nama'],
+                }
+                delete this.data2View[0]['pajak_skala_usaha_id']
+                delete this.data2View[0]['pajak_skala_usaha_kode']
+                delete this.data2View[0]['pajak_skala_usaha_nama']
+
+                //pajak_statuswp
+                this.data2View[0]['pajak_statuswp'] = {
+                    "pajak_statuswp_id": this.data2View[0]['pajak_statuswp_id'],
+                    "pajak_statuswp_kode": this.data2View[0]['pajak_statuswp_kode'],
+                    "pajak_statuswp_nama": this.data2View[0]['pajak_statuswp_nama'],
+                }
+                delete this.data2View[0]['pajak_statuswp_id']
+                delete this.data2View[0]['pajak_statuswp_kode']
+                delete this.data2View[0]['pajak_statuswp_nama']
+
+                //sektor_institusi
+                this.data2View[0]['sektor_institusi'] = {
+                    "sektor_institusi_id": this.data2View[0]['sektor_institusi_id'],
+                    "sektor_institusi_kode": this.data2View[0]['sektor_institusi_kode'],
+                    "sektor_institusi_nama": this.data2View[0]['sektor_institusi_nama'],
+                }
+                delete this.data2View[0]['sektor_institusi_id']
+                delete this.data2View[0]['sektor_institusi_kode']
+                delete this.data2View[0]['sektor_institusi_nama']
+
+                //status_perusahaan
+                this.data2View[0]['status_perusahaan'] = {
+                    "status_perusahaan_id": this.data2View[0]['status_perusahaan_id'],
+                    "status_perusahaan_kode": this.data2View[0]['status_perusahaan_kode'],
+                    "status_perusahaan_nama": this.data2View[0]['status_perusahaan_nama'],
+                }
+                delete this.data2View[0]['status_perusahaan_id']
+                delete this.data2View[0]['status_perusahaan_kode']
+                delete this.data2View[0]['status_perusahaan_nama']
+
+                for (let index = 0; index < this.datas2nd.length; index++) {
+                    // this.datas2nd[index]['nama_wilayah'] = {
+                    //     "negara_id": this.datas2nd[index]['negara_id'],
+                    //     "negara_kode": this.datas2nd[index]['negara_kode'],
+                    //     "negara_nama": this.datas2nd[index]['negara_nama'],
+                    //     "provinsi_id": this.datas2nd[index]['provinsi_id'],
+                    //     "provinsi_kode": this.datas2nd[index]['provinsi_kode'],
+                    //     "provinsi_nama": this.datas2nd[index]['provinsi_nama'],
+                    //     "kabupaten_kota_id": this.datas2nd[index]['kabupaten_kota_id'],
+                    //     "kabupaten_kota_kode": this.datas2nd[index]['kabupaten_kota_kode'],
+                    //     "kabupaten_kota_nama": this.datas2nd[index]['kabupaten_kota_nama'],
+                    //     "kecamatan_id": this.datas2nd[index]['kecamatan_id'],
+                    //     "kecamatan_kode": this.datas2nd[index]['kecamatan_kode'],
+                    //     "kecamatan_nama": this.datas2nd[index]['kecamatan_nama'],
+                    //     "kelurahan_desa_id": this.datas2nd[index]['kelurahan_desa_id'],
+                    //     "kelurahan_desa_kode": this.datas2nd[index]['kelurahan_desa_kode'],
+                    //     "kelurahan_desa_nama": this.datas2nd[index]['kelurahan_desa_nama'],
+                    // }
+                    // delete this.datas2nd[index]['negara_id']
+                    // delete this.datas2nd[index]['negara_kode']
+                    // delete this.datas2nd[index]['negara_nama']
+                    // delete this.datas2nd[index]['provinsi_id']
+                    // delete this.datas2nd[index]['provinsi_kode']
+                    // delete this.datas2nd[index]['provinsi_nama']
+                    // delete this.datas2nd[index]['kabupaten_kota_id']
+                    // delete this.datas2nd[index]['kabupaten_kota_kode']
+                    // delete this.datas2nd[index]['kabupaten_kota_nama']
+                    // delete this.datas2nd[index]['kecamatan_id']
+                    // delete this.datas2nd[index]['kecamatan_kode']
+                    // delete this.datas2nd[index]['kecamatan_nama']
+                    // delete this.datas2nd[index]['kelurahan_desa_id']
+                    // delete this.datas2nd[index]['kelurahan_desa_kode']
+                    // delete this.datas2nd[index]['kelurahan_desa_nama']
+
+
+
+
+                    // // const element = array[index];
+                    // delete this.datas2nd[index]['id_spool']
+
+                    // this.datas2nd[index]['no_telepon'] = {
+                    //     "ekstensi": this.datas2nd[index]['ekstensi'],
+                    //     "no_telepon": this.datas2nd[index]['no_telepon'],
+
+                    // }
+                    // this.datas2nd[index]['no_fax'] = {
+                    //     "no_fax": this.datas2nd[index]['no_fax']
+                    // }
+                    // this.datas2nd[index]['email'] = {
+                    //     "email": this.datas2nd[index]['email']
+                    // }
+                    // this.datas2nd[index]['website'] = {
+                    //     "website": this.datas2nd[index]['website']
+                    // }
+                    // delete this.datas2nd[index]['ekstensi']
+                    // // delete this.datas2nd[index]['no_fax']
+
+                    //negara
+                    this.datas2nd[index]['negara'] = {
+                        "negara_id": this.datas2nd[index]['negara_id'],
+                        "negara_kode": this.datas2nd[index]['negara_kode'],
+                        "negara_nama": this.datas2nd[index]['negara_nama'],
+                    }
+                    delete this.datas2nd[index]['negara_id']
+                    delete this.datas2nd[index]['negara_kode']
+                    delete this.datas2nd[index]['negara_nama']
+
+                    //provinsi
+                    this.datas2nd[index]['provinsi'] = {
+                        "provinsi_id": this.datas2nd[index]['provinsi_id'],
+                        "provinsi_kode": this.datas2nd[index]['provinsi_kode'],
+                        "provinsi_nama": this.datas2nd[index]['provinsi_nama'],
+                    }
+                    delete this.datas2nd[index]['provinsi_id']
+                    delete this.datas2nd[index]['provinsi_kode']
+                    delete this.datas2nd[index]['provinsi_nama']
+
+                    //kabupaten_kota
+                    this.datas2nd[index]['kabupaten_kota'] = {
+                        "kabupaten_kota_id": this.datas2nd[index]['kabupaten_kota_id'],
+                        "kabupaten_kota_kode": this.datas2nd[index]['kabupaten_kota_kode'],
+                        "kabupaten_kota_nama": this.datas2nd[index]['kabupaten_kota_nama'],
+                    }
+                    delete this.datas2nd[index]['kabupaten_kota_id']
+                    delete this.datas2nd[index]['kabupaten_kota_kode']
+                    delete this.datas2nd[index]['kabupaten_kota_nama']
+
+                    //kecamtan
+                    this.datas2nd[index]['kecamatan'] = {
+                        "kecamatan_id": this.datas2nd[index]['kecamatan_id'],
+                        "kecamatan_kode": this.datas2nd[index]['kecamatan_kode'],
+                        "kecamatan_nama": this.datas2nd[index]['kecamatan_nama'],
+                    }
+                    delete this.datas2nd[index]['kecamatan_id']
+                    delete this.datas2nd[index]['kecamatan_kode']
+                    delete this.datas2nd[index]['kecamatan_nama']
+
+                    //kelurahan
+                    this.datas2nd[index]['kelurahan_desa'] = {
+                        "kelurahan_desa_id": this.datas2nd[index]['kelurahan_desa_id'],
+                        "kelurahan_desa_kode": this.datas2nd[index]['kelurahan_desa_kode'],
+                        "kelurahan_desa_nama": this.datas2nd[index]['kelurahan_desa_nama'],
+                    }
+                    delete this.datas2nd[index]['kelurahan_desa_id']
+                    delete this.datas2nd[index]['kelurahan_desa_kode']
+                    delete this.datas2nd[index]['kelurahan_desa_nama']
+
+                    //jaringan_usaha
+                    this.datas2nd[index]['jaringan_usaha'] = {
+                        "jaringan_usaha_id": this.datas2nd[index]['jaringan_usaha_id'],
+                        "jaringan_usaha_kode": this.datas2nd[index]['jaringan_usaha_kode'],
+                        "jaringan_usaha_nama": this.datas2nd[index]['jaringan_usaha_nama'],
+                    }
+                    delete this.datas2nd[index]['jaringan_usaha_id']
+                    delete this.datas2nd[index]['jaringan_usaha_kode']
+                    delete this.datas2nd[index]['jaringan_usaha_nama']
+
+                    //jenis_badan_hukum_badan_usaha
+                    this.datas2nd[index]['jenis_badan_hukum_badan_usaha'] = {
+                        "jenis_badan_hukum_badan_usaha_id": this.datas2nd[index][
+                            'jenis_badan_hukum_badan_usaha_id'
+                        ],
+                        "jenis_badan_hukum_badan_usaha_kode": this.datas2nd[index][
+                            'jenis_badan_hukum_badan_usaha_kode'
+                        ],
+                        "jenis_badan_hukum_badan_usaha_nama": this.datas2nd[index][
+                            'jenis_badan_hukum_badan_usaha_nama'
+                        ],
+                    }
+                    delete this.datas2nd[index]['jenis_badan_hukum_badan_usaha_id']
+                    delete this.datas2nd[index]['jenis_badan_hukum_badan_usaha_kode']
+                    delete this.datas2nd[index]['jenis_badan_hukum_badan_usaha_nama']
+
+                    //kbji_pengusaha
+                    this.datas2nd[index]['kbji_pengusaha'] = {
+                        "kbji_pengusaha_id": this.datas2nd[index]['kbji_pengusaha_id'],
+                        "kbji_pengusaha_kode": this.datas2nd[index]['kbji_pengusaha_kode'],
+                        "kbji_pengusaha_nama": this.datas2nd[index]['kbji_pengusaha_nama'],
+                    }
+                    delete this.datas2nd[index]['kbji_pengusaha_id']
+                    delete this.datas2nd[index]['kbji_pengusaha_kode']
+                    delete this.datas2nd[index]['kbji_pengusaha_nama']
+
+                    //kewarganegaraan_pengusaha
+                    this.datas2nd[index]['kewarganegaraan_pengusaha'] = {
+                        "kewarganegaraan_pengusaha_id": this.datas2nd[index]['kewarganegaraan_pengusaha_id'],
+                        "kewarganegaraan_pengusaha_kode": this.datas2nd[index]['kewarganegaraan_pengusaha_kode'],
+                        "kewarganegaraan_pengusaha_nama": this.datas2nd[index]['kewarganegaraan_pengusaha_nama'],
+                    }
+                    delete this.datas2nd[index]['kewarganegaraan_pengusaha_id']
+                    delete this.datas2nd[index]['kewarganegaraan_pengusaha_kode']
+                    delete this.datas2nd[index]['kewarganegaraan_pengusaha_nama']
+
+                    //pajak_jeniswp
+                    this.datas2nd[index]['pajak_jeniswp'] = {
+                        "pajak_jeniswp_id": this.datas2nd[index]['pajak_jeniswp_id'],
+                        "pajak_jeniswp_kode": this.datas2nd[index]['pajak_jeniswp_kode'],
+                        "pajak_jeniswp_nama": this.datas2nd[index]['pajak_jeniswp_nama'],
+                    }
+                    delete this.datas2nd[index]['pajak_jeniswp_id']
+                    delete this.datas2nd[index]['pajak_jeniswp_kode']
+                    delete this.datas2nd[index]['pajak_jeniswp_nama']
+
+                    //pajak_skala_usaha
+                    this.datas2nd[index]['pajak_skala_usaha'] = {
+                        "pajak_skala_usaha_id": this.datas2nd[index]['pajak_skala_usaha_id'],
+                        "pajak_skala_usaha_kode": this.datas2nd[index]['pajak_skala_usaha_kode'],
+                        "pajak_skala_usaha_nama": this.datas2nd[index]['pajak_skala_usaha_nama'],
+                    }
+                    delete this.datas2nd[index]['pajak_skala_usaha_id']
+                    delete this.datas2nd[index]['pajak_skala_usaha_kode']
+                    delete this.datas2nd[index]['pajak_skala_usaha_nama']
+
+                    //pajak_statuswp
+                    this.datas2nd[index]['pajak_statuswp'] = {
+                        "pajak_statuswp_id": this.datas2nd[index]['pajak_statuswp_id'],
+                        "pajak_statuswp_kode": this.datas2nd[index]['pajak_statuswp_kode'],
+                        "pajak_statuswp_nama": this.datas2nd[index]['pajak_statuswp_nama'],
+                    }
+                    delete this.datas2nd[index]['pajak_statuswp_id']
+                    delete this.datas2nd[index]['pajak_statuswp_kode']
+                    delete this.datas2nd[index]['pajak_statuswp_nama']
+
+                    //sektor_institusi
+                    this.datas2nd[index]['sektor_institusi'] = {
+                        "sektor_institusi_id": this.datas2nd[index]['sektor_institusi_id'],
+                        "sektor_institusi_kode": this.datas2nd[index]['sektor_institusi_kode'],
+                        "sektor_institusi_nama": this.datas2nd[index]['sektor_institusi_nama'],
+                    }
+                    delete this.datas2nd[index]['sektor_institusi_id']
+                    delete this.datas2nd[index]['sektor_institusi_kode']
+                    delete this.datas2nd[index]['sektor_institusi_nama']
+
+                    //status_perusahaan
+                    this.datas2nd[index]['status_perusahaan'] = {
+                        "status_perusahaan_id": this.datas2nd[index]['status_perusahaan_id'],
+                        "status_perusahaan_kode": this.datas2nd[index]['status_perusahaan_kode'],
+                        "status_perusahaan_nama": this.datas2nd[index]['status_perusahaan_nama'],
+                    }
+                    delete this.datas2nd[index]['status_perusahaan_id']
+                    delete this.datas2nd[index]['status_perusahaan_kode']
+                    delete this.datas2nd[index]['status_perusahaan_nama']
+
+                    //produk perusahaan
+                    this.datas2nd[index]['produk_perusahaan'] = {
+                        "id": null,
+                        "kbki": this.datas2nd[index]['kbki_produk_perusahaan'],
+                        "produk": this.datas2nd[index]['produk_perusahaan'],
+                        "perusahaan_id": null,
+                    }
+                    delete this.datas2nd[index]['kbki_produk_perusahaan']
+                    // delete this.datas2nd[index]['produk_perusahaan']
+
+                    //aktivitas perusahaan
+                    this.datas2nd[index]['aktivitas_perusahaan'] = {
+                        "id": null,
+                        "aktivitas": this.datas2nd[index]['aktivitas_perusahaan'],
+                        "jenis": null,
+                        "kategori": this.datas2nd[index]['kategori_aktivitas_perusahaan'],
+                        "kbli": this.datas2nd[index]['kbli_aktivitas_perusahaan'],
+                        "perusahaan_id": null
+                    }
+                    delete this.datas2nd[index]['kategori_aktivitas_perusahaan']
+                    delete this.datas2nd[index]['kbli_aktivitas_perusahaan']
+
+                    //pemegang saham
+                    this.datas2nd[index]['pemegang_saham'] = {
+                        "id": null,
+                        "pemegang_saham": this.datas2nd[index]['pemegang_saham'],
+                        "persentase_saham": this.datas2nd[index]['persentase_saham'],
+                        "pemegang_saham_perusahaan_id": null,
+                        "perusahaan_id": null
+                    }
+                    delete this.datas2nd[index]['persentase_saham']
+
+                    //alamat_perusahaan
+                    this.datas2nd[index]['alamat_email_perusahaan'] = {
+                        "id": null,
+                        "email": this.datas2nd[index]['alamat_email_perusahaan'],
+                        "perusahaan_id": null
+                    }
+                    // delete this.datas2nd[index]['alamat_email_perusahaan']
+
+                    //alamat_fax_perusahaan
+                    this.datas2nd[index]['alamat_fax_perusahaan'] = {
+                        "id": null,
+                        "nomor_faksimili": this.datas2nd[index]['alamat_fax_perusahaan'],
+                        "perusahaan_id": null
+                    }
+                    // delete this.datas2nd[index]['alamat_fax_perusahaan']
+
+                    //alamat_telepon_perusahaan
+                    this.datas2nd[index]['alamat_telepon_perusahaan'] = {
+                        "id": null,
+                        "nomor_ekstensi": null,
+                        "nomor_telepon": this.datas2nd[index]['alamat_telepon_perusahaan'],
+                        "perusahaan_id": null
+                    }
+                    // delete this.datas2nd[index]['alamat_telepon_perusahaan']
+
+                    //alamat_web_perusahaan
+                    this.datas2nd[index]['alamat_web_perusahaan'] = {
+                        "id": null,
+                        "website": this.datas2nd[index]['alamat_web_perusahaan'],
+                        "perusahaan_id": null
+                    }
+                    // delete this.datas2nd[index]['alamat_web_perusahaan']
+
+                    //kontak_perusahaan
+                    this.datas2nd[index]['kontak_perusahaan'] = {
+                        "id": null,
+                        "email": this.datas2nd[index]['kontak_perusahaan_email'],
+                        "nama": this.datas2nd[index]['kontak_perusahaan_nama'],
+                        "nomor_telepon": this.datas2nd[index]['kontak_perusahaan_nomor_telepon'],
+                        "kbji_id": null,
+                        "perusahaan_id": null
+
+                    }
+                    delete this.datas2nd[index]['kontak_perusahaan_email']
+                    delete this.datas2nd[index]['kontak_perusahaan_nama']
+                    delete this.datas2nd[index]['kontak_perusahaan_nomor_telepon']
+
+                    this.datas2nd[index]['tes'] = 'tes'
+
+                }
+
+
+
+                // delete this.datas2nd[0]['id_spool']
+                // delete this.datas2nd[1]['id_spool']
+                // delete this.datas2nd[0]['ekstensi']
+                // delete this.datas2nd[1]['ekstensi']
+
+            },
             editKeySelected(data) {
 
                 this.selectedKey = this.displayKey
@@ -813,34 +1513,52 @@
                     variabel,
                     value
                 }))
-                console.log('transposedData', this.transposedData.length)
+                console.log('transposedData', this.transposedData, 'length', this.transposedData.length)
                 console.log('datas2nd length', this.datas2nd[0])
 
-                for (let index1 = 0; index1 < this.datas2nd.length; index1++) {
-                    console.log('length sumber assessment', this.datas2nd.length)
-                    var element = this.datas2nd[index1];
-                    element = Object.entries(element).map(([variabel, value]) => ({
-                        variabel,
-                        value
-                    }))
+                // this.transposedData.forEach(element => {
 
+                // });
 
-                    console.log('el23', element[23])
-
-                    for (let index2 = 0; index2 < Object.values(element).length; index2++) {
-                        let indexH = index1 + 1
-                        let newSumber = "sumber" + indexH
-                        console.log('element', element)
-                        console.log('element length', element.length)
-                        console.log('newSumber', newSumber)
-                        console.log('index2', index2)
-
-                        this.transposedData[index2][newSumber] = element[index2].value
-
-                    }
-
+                for (let index = 0; index < this.datas2nd.length; index++) {
+                    let newSumber = "sumber" + (index + 1)
+                    this.transposedData.forEach((element, indexTD) => {
+                        console.log(newSumber, 'element :', element, 'indexTD', indexTD)
+                        this.transposedData[indexTD][newSumber] = this.datas2nd[index][element.variabel]
+                    });
 
                 }
+
+
+                //lama
+                // for (let index1 = 0; index1 < this.datas2nd.length; index1++) {
+                //     // console.log('length sumber assessment', this.datas2nd.length)
+                //     var element = this.datas2nd[index1];
+                //     element = Object.entries(element).map(([variabel, value]) => ({
+                //         variabel,
+                //         value
+                //     }))
+
+
+                //     // console.log('el23', element[23])
+
+                //     for (let index2 = 0; index2 < Object.values(element).length; index2++) {
+                //         let indexH = index1 + 1
+                //         let newSumber = "sumber" + indexH
+                //         // console.log('element', element)
+                //         // console.log('element length', element.length)
+                //         // console.log('newSumber', newSumber)
+                //         // console.log('index2', index2)
+
+                //         this.transposedData[index2][newSumber] = element[index2].value
+
+                //     }
+
+
+                // }
+                //lama
+
+
                 console.table('transposedData Table', this.transposedData)
 
 
@@ -848,100 +1566,165 @@
                 //     console.log(this.transposedData[0])
 
             },
+            validasi() {
+                var myKeys = Object.keys(this.selectedData)
+                myKeys.forEach(element => {
+                    console.log(element, 'element')
+                    if (element !== 'telepon' &&
+                        element !== 'fax' &&
+                        element !== 'email' &&
+                        element !== 'website' &&
+                        element !== 'petugas_assessment'
+                    ) {
+                        if (this.selectedData[element] == null) {
+                            var errorMsg = element + ' harus terisi'
+                            this.errorMessages.push(errorMsg)
+                        }
+
+                    }
+                });
+
+
+
+
+                if (Array.isArray(this.selectedData['telepon'])) {
+                    console.log('true telepon')
+                    if (this.selectedData['telepon'].length !== 3) {
+
+                        // var a = [{
+                        //         'ekstensi': null,
+                        //         'no_telepon': null
+                        //     },
+                        //     {
+                        //         'ekstensi': null,
+                        //         'no_telepon': null
+                        //     },
+                        //     {
+                        //         'ekstensi': null,
+                        //         'no_telepon': null
+                        //     },
+                        // ]
+                        // console.log('teslength', Object.entries(this.selectedData['telepon']))
+                        // this.selectedData['telepon'] = a
+
+                        var message = "Jumlah ekstensi dan no telepon harus 3 pasang"
+                        this.errorMessages.push(message)
+                    }
+                } else {
+                    console.log('false telepon')
+                    message = "Jumlah ekstensi dan no telepon harus 3 pasang"
+                    this.errorMessages.push(message)
+                }
+
+                if (Array.isArray(this.selectedData['fax'])) {
+                    console.log('true telepon')
+                    if (this.selectedData['fax'].length !== 2) {
+
+                        // var myfax = [{
+                        //         'no_fax': this.selectedData['fax'],
+                        //     },
+                        //     {
+                        //         'no_fax': null,
+                        //     }
+
+                        // ]
+
+                        // this.selectedData['fax'] = myfax
+                        var messageFax = "Jumlah fax harus 2"
+                        this.errorMessages.push(messageFax)
+                    }
+                } else {
+                    console.log('false fax')
+                    messageFax = "Jumlah fax harus 2"
+                    this.errorMessages.push(messageFax)
+                }
+
+                if (Array.isArray(this.selectedData['email'])) {
+                    console.log('true telepon')
+                    if (this.selectedData['email'].length !== 2) {
+
+                        // var myemail = [{
+                        //         'email': this.selectedData['email'],
+
+                        //     },
+                        //     {
+                        //         'email': null,
+                        //     },
+                        // ]
+                        // console.log('teslength', Object.entries(this.selectedData['telepon']))
+                        // this.selectedData['email'] = myemail
+                        var messageEmail = "Jumlah email harus 2"
+                        this.errorMessages.push(messageEmail)
+                    }
+                } else {
+                    console.log('false email')
+                    messageEmail = "Jumlah email harus 2"
+                    this.errorMessages.push(messageEmail)
+                }
+
+                if (Array.isArray(this.selectedData['website'])) {
+                    console.log('true telepon')
+                    if (this.selectedData['website'].length !== 2) {
+
+                        // var myweb = [{
+                        //         'website': this.selectedData['website'],
+
+                        //     },
+                        //     {
+                        //         'website': null,
+
+                        //     },
+
+                        // ]
+                        // console.log('teslength', Object.entries(this.selectedData['telepon']))
+                        // this.selectedData['website'] = myweb
+                        var messageWeb = "Jumlah Website harus 2"
+                        this.errorMessages.push(messageWeb)
+                    }
+                } else {
+                    console.log('false web')
+                    messageWeb = "Jumlah Website harus 2"
+                    this.errorMessages.push(messageWeb)
+                }
+            },
             async submit() {
+                this.errorMessages = []
                 this.loadingDialog = true
                 console.log(typeof this.selectedData)
                 console.log('selectedDataFinal', this.selectedData)
                 console.log('selectedData : ', Object.assign(this.selectedData))
+                console.log('telepon :', typeof this.selectedData['telepon'])
 
                 // this.$store.dispatch('compareTable/setSelectedData', Object.assign(this.selectedData), {
                 //     root: true
                 // })
-                this.selectedData['petugas_assessment'] = 1
-                console.log('telepon', this.selectedData['telepon'].length)
-                console.log('fax', this.selectedData['fax'].length)
-                console.log('email', this.selectedData['email'].length)
-                console.log('website', this.selectedData['website'].length)
-                console.log('selectedDataFinal', this.selectedData)
-                if (this.selectedData['telepon'].length !== 3) {
 
-                    // var a = [{
-                    //         'ekstensi': null,
-                    //         'no_telepon': null
-                    //     },
-                    //     {
-                    //         'ekstensi': null,
-                    //         'no_telepon': null
-                    //     },
-                    //     {
-                    //         'ekstensi': null,
-                    //         'no_telepon': null
-                    //     },
-                    // ]
-                    // console.log('teslength', Object.entries(this.selectedData['telepon']))
-                    // this.selectedData['telepon'] = a
+                //id Alokasi
+                this.selectedData['id_alokasi'] = this.idAlokasi
 
-                    var message = "Jumlah ekstensi dan no telepon harus 3 pasang"
-                    this.errorMessages.push(message)
-                }
+                //Select Petugas Id
+                this.selectedData['petugas_assessment'] = this.currentId
 
-                if (this.selectedData['fax'].length !== 2) {
+                //Id Perusahaan
+                this.selectedData['id_perusahaan'] = this.idPerusahaan
+                this.reformatKey()
+                // console.log('telepon', this.selectedData['telepon'].length)
+                // console.log('fax', this.selectedData['fax'].length)
+                // console.log('email', this.selectedData['email'].length)
+                // console.log('website', this.selectedData['website'].length)
+                // console.log('selectedDataFinal', this.selectedData)
 
-                    // var myfax = [{
-                    //         'no_fax': this.selectedData['fax'],
-                    //     },
-                    //     {
-                    //         'no_fax': null,
-                    //     }
-
-                    // ]
-
-                    // this.selectedData['fax'] = myfax
-                    var messageFax = "Jumlah fax harus 2"
-                    this.errorMessages.push(messageFax)
-                }
-
-                if (this.selectedData['email'].length !== 2) {
-
-                    // var myemail = [{
-                    //         'email': this.selectedData['email'],
-
-                    //     },
-                    //     {
-                    //         'email': null,
-                    //     },
-                    // ]
-                    // console.log('teslength', Object.entries(this.selectedData['telepon']))
-                    // this.selectedData['email'] = myemail
-                    var messageEmail = "Jumlah email harus 2"
-                    this.errorMessages.push(messageEmail)
-                }
-                if (this.selectedData['website'].length !== 2) {
-
-                    // var myweb = [{
-                    //         'website': this.selectedData['website'],
-
-                    //     },
-                    //     {
-                    //         'website': null,
-
-                    //     },
-
-                    // ]
-                    // console.log('teslength', Object.entries(this.selectedData['telepon']))
-                    // this.selectedData['website'] = myweb
-                    var messageWeb = "Jumlah Website harus 2"
-                    this.errorMessages.push(messageWeb)
-                }
-
-                console.log('telepon', this.selectedData['telepon'].length)
-                console.log('fax', this.selectedData['fax'].length)
-                console.log('email', this.selectedData['email'].length)
-                console.log('website', this.selectedData['website'].length)
-                console.log('selectedDataFinal x', this.selectedData)
-
+                //Validasi
+                // this.validasi()
+                // console.log('telepon', this.selectedData['telepon'].length)
+                // console.log('fax', this.selectedData['fax'].length)
+                // console.log('email', this.selectedData['email'].length)
+                // console.log('website', this.selectedData['website'].length)
+                // console.log('selectedDataFinal x', this.selectedData)
+                console.log('finalSelectedData', this.selectedData)
                 if (this.errorMessages.length == 0) {
-                    await DataService.postDataSBR(this.selectedData).then(response => {
+                    await DataService.postDataAssessment(this.selectedData, this.selectedKegiatan.id_kegiatan,
+                            this.currentId).then(response => {
                             console.log(response);
 
                             this.getDataSBR().then(response => {
@@ -964,7 +1747,8 @@
 
                         })
                         .catch(function (error) {
-                            console.log(error);
+                            console.log('myerror', error);
+                            this.loadingDialog = false
                             this.$toast.add({
                                 severity: 'error',
                                 summary: 'Error!',
@@ -973,10 +1757,155 @@
                             });
                         });
 
+                } else {
+                    this.loadingDialog = false
+                    this.$toast.add({
+                        severity: 'error',
+                        summary: 'Error!',
+                        detail: 'Ups, ada error :(',
+                        life: 5000
+                    });
                 }
 
 
 
+
+
+            },
+            reformatKey() {
+                console.log('reformatKey', this.selectedData)
+                // console.log('negara_id', this.selectedData.negara.negara_id)
+
+                this.selectedData['negara_id'] = this.selectedData.negara !== null ? this.selectedData.negara
+                    .negara_id : null
+                this.selectedData['negara_kode'] = this.selectedData.negara !== null ? this.selectedData.negara
+                    .negara_kode : null
+                this.selectedData['negara_nama'] = this.selectedData.negara !== null ? this.selectedData.negara
+                    .negara_nama : null
+                // delete this.selectedData['negara']
+
+                this.selectedData['provinsi_id'] = this.selectedData.provinsi !== null ? this.selectedData.provinsi
+                    .provinsi_id : null
+                this.selectedData['provinsi_kode'] = this.selectedData.provinsi !== null ? this.selectedData.provinsi
+                    .provinsi_kode : null
+                this.selectedData['provinsi_nama'] = this.selectedData.provinsi !== null ? this.selectedData.provinsi
+                    .provinsi_nama : null
+                //delete this.selectedData['provinsi']
+
+                this.selectedData['kabupaten_kota_id'] = this.selectedData.kabupaten_kota !== null ? this.selectedData
+                    .kabupaten_kota.kabupaten_kota_id : null
+                this.selectedData['kabupaten_kota_kode'] = this.selectedData.kabupaten_kota !== null ? this.selectedData
+                    .kabupaten_kota.kabupaten_kota_kode : null
+                this.selectedData['kabupaten_kota_nama'] = this.selectedData.kabupaten_kota !== null ? this.selectedData
+                    .kabupaten_kota.kabupaten_kota_nama : null
+                //delete this.selectedData['kabupaten_kota']
+
+                this.selectedData['kecamatan_id'] = this.selectedData.kecamatan !== null ? this.selectedData.kecamatan
+                    .kecamatan_id : null
+                this.selectedData['kecamatan_kode'] = this.selectedData.kecamatan !== null ? this.selectedData.kecamatan
+                    .kecamatan_kode : null
+                this.selectedData['kecamatan_nama'] = this.selectedData.kecamatan !== null ? this.selectedData.kecamatan
+                    .kecamatan_nama : null
+                //delete this.selectedData['kecamatan']
+
+                this.selectedData['kelurahan_desa_id'] = this.selectedData.kelurahan_desa !== null ? this.selectedData
+                    .kelurahan_desa.kelurahan_desa_id : null
+                this.selectedData['kelurahan_desa_kode'] = this.selectedData.kelurahan_desa !== null ? this.selectedData
+                    .kelurahan_desa.kelurahan_desa_kode : null
+                this.selectedData['kelurahan_desa_nama'] = this.selectedData.kelurahan_desa !== null ? this.selectedData
+                    .kelurahan_desa.kelurahan_desa_nama : null
+                //delete this.selectedData['kelurahan_desa']
+
+                this.selectedData['jaringan_usaha_id'] = this.selectedData.jaringan_usaha !== null ? this.selectedData
+                    .jaringan_usaha.jaringan_usaha_id : null
+                this.selectedData['jaringan_usaha_kode'] = this.selectedData.jaringan_usaha !== null ? this.selectedData
+                    .jaringan_usaha.jaringan_usaha_kode : null
+                this.selectedData['jaringan_usaha_nama'] = this.selectedData.jaringan_usaha !== null ? this.selectedData
+                    .jaringan_usaha.jaringan_usaha_nama : null
+                //delete this.selectedData['jaringan_usaha']
+
+                this.selectedData['jenis_badan_hukum_badan_usaha_id'] = this.selectedData
+                    .jenis_badan_hukum_badan_usaha !== null ? this.selectedData.jenis_badan_hukum_badan_usaha
+                    .jenis_badan_hukum_badan_usaha_id : null
+                this.selectedData['jenis_badan_hukum_badan_usaha_kode'] = this.selectedData
+                    .jenis_badan_hukum_badan_usaha !== null ? this.selectedData.jenis_badan_hukum_badan_usaha
+                    .jenis_badan_hukum_badan_usaha_kode : null
+                this.selectedData['jenis_badan_hukum_badan_usaha_nama'] = this.selectedData
+                    .jenis_badan_hukum_badan_usaha !== null ? this.selectedData.jenis_badan_hukum_badan_usaha
+                    .jenis_badan_hukum_badan_usaha_nama : null
+                //delete this.selectedData['jenis_badan_hukum_badan_usaha']
+
+                this.selectedData['kbji_pengusaha_id'] = this.selectedData.kbji_pengusaha !== null ? this.selectedData
+                    .kbji_pengusaha.kbji_pengusaha_id : null
+                this.selectedData['kbji_pengusaha_kode'] = this.selectedData.kbji_pengusaha !== null ? this.selectedData
+                    .kbji_pengusaha.kbji_pengusaha_kode : null
+                this.selectedData['kbji_pengusaha_nama'] = this.selectedData.kbji_pengusaha !== null ? this.selectedData
+                    .kbji_pengusaha.kbji_pengusaha_nama : null
+                //delete this.selectedData['kbji_pengusaha']
+
+                this.selectedData['kewarganegaraan_pengusaha_id'] = this.selectedData.kewarganegaraan_pengusaha !==
+                    null ? this.selectedData.kewarganegaraan_pengusaha.kewarganegaraan_pengusaha_id : null
+                this.selectedData['kewarganegaraan_pengusaha_kode'] = this.selectedData.kewarganegaraan_pengusaha !==
+                    null ? this.selectedData.kewarganegaraan_pengusaha.kewarganegaraan_pengusaha_kode : null
+                this.selectedData['kewarganegaraan_pengusaha_nama'] = this.selectedData.kewarganegaraan_pengusaha !==
+                    null ? this.selectedData.kewarganegaraan_pengusaha.kewarganegaraan_pengusaha_nama : null
+                //delete this.selectedData['kewarganegaraan_pengusaha']
+
+                this.selectedData['pajak_jeniswp_id'] = this.selectedData.pajak_jeniswp !== null ? this.selectedData
+                    .pajak_jeniswp.pajak_jeniswp_id : null
+                this.selectedData['pajak_jeniswp_kode'] = this.selectedData.pajak_jeniswp !== null ? this.selectedData
+                    .pajak_jeniswp.pajak_jeniswp_kode : null
+                this.selectedData['pajak_jeniswp_nama'] = this.selectedData.pajak_jeniswp !== null ? this.selectedData
+                    .pajak_jeniswp.pajak_jeniswp_nama : null
+                //delete this.selectedData['pajak_jeniswp']
+
+                this.selectedData['pajak_skala_usaha_id'] = this.selectedData.pajak_skala_usaha !== null ? this
+                    .selectedData.pajak_skala_usaha.pajak_skala_usaha_id : null
+                this.selectedData['pajak_skala_usaha_kode'] = this.selectedData.pajak_skala_usaha !== null ? this
+                    .selectedData.pajak_skala_usaha.pajak_skala_usaha_kode : null
+                this.selectedData['pajak_skala_usaha_nama'] = this.selectedData.pajak_skala_usaha !== null ? this
+                    .selectedData.pajak_skala_usaha.pajak_skala_usaha_nama : null
+                //delete this.selectedData['pajak_skala_usaha']
+
+                this.selectedData['pajak_statuswp_id'] = this.selectedData.pajak_statuswp !== null ? this.selectedData
+                    .pajak_statuswp.pajak_statuswp_id : null
+                this.selectedData['pajak_statuswp_kode'] = this.selectedData.pajak_statuswp !== null ? this.selectedData
+                    .pajak_statuswp.pajak_statuswp_kode : null
+                this.selectedData['pajak_statuswp_nama'] = this.selectedData.pajak_statuswp !== null ? this.selectedData
+                    .pajak_statuswp.pajak_statuswp_nama : null
+                //delete this.selectedData['pajak_statuswp']
+
+                this.selectedData['sektor_institusi_id'] = this.selectedData.sektor_institusi !== null ? this
+                    .selectedData.sektor_institusi.sektor_institusi_id : null
+                this.selectedData['sektor_institusi_kode'] = this.selectedData.sektor_institusi !== null ? this
+                    .selectedData.sektor_institusi.sektor_institusi_kode : null
+                this.selectedData['sektor_institusi_nama'] = this.selectedData.sektor_institusi !== null ? this
+                    .selectedData.sektor_institusi.sektor_institusi_nama : null
+                //delete this.selectedData['sektor_institusi']
+
+                this.selectedData['status_perusahaan_id'] = this.selectedData.status_perusahaan !== null ? this
+                    .selectedData.status_perusahaan.status_perusahaan_id : null
+                this.selectedData['status_perusahaan_kode'] = this.selectedData.status_perusahaan !== null ? this
+                    .selectedData.status_perusahaan.status_perusahaan_kode : null
+                this.selectedData['status_perusahaan_nama'] = this.selectedData.status_perusahaan !== null ? this
+                    .selectedData.status_perusahaan.status_perusahaan_nama : null
+                //delete this.selectedData['status_perusahaan']
+                this.selectedData['produk_perusahaan'] = this.selectedData['produk_perusahaan'] == null ? [] : this
+                    .selectedData['produk_perusahaan']
+                this.selectedData['aktivitas_perusahaan'] = this.selectedData['aktivitas_perusahaan'] == null ? [] :
+                    this.selectedData['aktivitas_perusahaan']
+                this.selectedData['pemegang_saham'] = this.selectedData['pemegang_saham'] == null ? [] : this
+                    .selectedData['pemegang_saham']
+                this.selectedData['alamat_email_perusahaan'] = this.selectedData['alamat_email_perusahaan'] == null ?
+                [] : this.selectedData['alamat_email_perusahaan']
+                this.selectedData['alamat_fax_perusahaan'] = this.selectedData['alamat_fax_perusahaan'] == null ? [] :
+                    this.selectedData['alamat_fax_perusahaan']
+                this.selectedData['alamat_telepon_perusahaan'] = this.selectedData['alamat_telepon_perusahaan'] ==
+                    null ? [] : this.selectedData['alamat_telepon_perusahaan']
+                this.selectedData['alamat_web_perusahaan'] = this.selectedData['alamat_web_perusahaan'] == null ? [] :
+                    this.selectedData['alamat_web_perusahaan']
+                this.selectedData['kontak_perusahaan'] = this.selectedData['kontak_perusahaan'] == null ? [] : this
+                    .selectedData['kontak_perusahaan']
 
 
             },
@@ -1015,6 +1944,10 @@
         line-height: 1.5rem;
     }
 
+    .p-progressbar-label {
+        color: white !important;
+    }
+
     .cardBg {
         background-color: #9155fd;
         color: white;
@@ -1036,5 +1969,112 @@
 
     tr:nth-child(even) {
         /* background-color: #dddddd; */
+    }
+
+    .p-breadcrumb {
+        border: none;
+        border-radius: 14px;
+    }
+
+    nav {
+        background-color: v-bind(headerBg) !important;
+        color: v-bind(textColor) !important;
+    }
+
+    .p-menuitem-text {
+        color: v-bind(textColor) !important;
+    }
+
+    .p-breadcrumb ul li .p-breadcrumb-chevron {
+        color: v-bind(textColor) !important;
+    }
+
+    .p-breadcrumb ul li .p-menuitem-link .p-menuitem-icon {
+        color: v-bind(textColor) !important;
+    }
+
+    .p-dropdown .p-dropdown-label .p-placeholder {
+        color: v-bind(textColor) !important;
+    }
+
+    .p-input-text {
+        color: v-bind(textColor) !important;
+    }
+
+
+    /* Bob */
+    @-webkit-keyframes hvr-bob {
+        0% {
+            -webkit-transform: translateY(-14px);
+            transform: translateY(-14px);
+        }
+
+        50% {
+            -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+        }
+
+        100% {
+            -webkit-transform: translateY(-14px);
+            transform: translateY(-14px);
+        }
+    }
+
+    @keyframes hvr-bob {
+        0% {
+            -webkit-transform: translateY(-14px);
+            transform: translateY(-14px);
+        }
+
+        50% {
+            -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+        }
+
+        100% {
+            -webkit-transform: translateY(-14px);
+            transform: translateY(-14px);
+        }
+    }
+
+    @-webkit-keyframes hvr-bob-float {
+        100% {
+            -webkit-transform: translateY(-14px);
+            transform: translateY(-14px);
+        }
+    }
+
+    @keyframes hvr-bob-float {
+        100% {
+            -webkit-transform: translateY(-14px);
+            transform: translateY(-14px);
+        }
+    }
+
+    .hvr-bob {
+        display: inline-block;
+        vertical-align: middle;
+        -webkit-transform: perspective(1px) translateZ(0);
+        transform: perspective(1px) translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    }
+
+    .hvr-bob,
+    .hvr-bob,
+    .hvr-bob {
+        -webkit-animation-name: hvr-bob-float, hvr-bob;
+        animation-name: hvr-bob-float, hvr-bob;
+        -webkit-animation-duration: .3s, 1.5s;
+        animation-duration: .3s, 1.5s;
+        -webkit-animation-delay: 0s, .3s;
+        animation-delay: 0s, .3s;
+        -webkit-animation-timing-function: ease-out, ease-in-out;
+        animation-timing-function: ease-out, ease-in-out;
+        -webkit-animation-iteration-count: 1, infinite;
+        animation-iteration-count: 1, infinite;
+        -webkit-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+        -webkit-animation-direction: normal, alternate;
+        animation-direction: normal, alternate;
     }
 </style>

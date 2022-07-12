@@ -1,16 +1,16 @@
 import axios from 'axios'
 
-const apiClient = axios.create({
-  baseURL: 'https://my-json-server.typicode.com/imamsatya/testdb',
-  withCredentials: false,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  },
-  maxContentLength: Infinity,
-  maxBodyLength: Infinity
-})
+// const apiClient = axios.create({
+//   baseURL: 'https://my-json-server.typicode.com/imamsatya/testdb2',
+//   withCredentials: false,
+//   headers: {
+//     Accept: 'application/json',
+//     'Content-Type': 'application/json',
+//     'Access-Control-Allow-Origin': '*'
+//   },
+//   maxContentLength: Infinity,
+//   maxBodyLength: Infinity
+// })
 
 const apiClientSbr = axios.create({
   baseURL: 'https://webapps.bps.go.id/pengolahansbr',
@@ -26,37 +26,125 @@ const apiClientSbr = axios.create({
 
 
 export default {
- getDummySBR(){
-  return apiClient.get('/dataSBR')
- },
-  getData1() {
-    return apiClient.get('/data1')
+//  getDummySBR(){
+//   return apiClient.get('/dataSBR')
+//  },
+//   getData1() {
+//     return apiClient.get('/data1')
+//   },
+//   getData2() {
+//     return apiClient.get('/data2')
+//   },
+//   getData3() {
+//     return apiClient.get('/data3')
+//   },
+
+// getDataSBR($id){
+//   return apiClientSbr.get('/assessment-backend/api/assessment?user='+$id)
+// },
+
+// getPetugas(){
+//   return apiClientSbr.get('/assessment-backend/api/petugas')
+// },
+// postDataSBR($data){
+//   return apiClientSbr.post('/assessment-backend/api/assessment', $data)
+// },
+
+//Authentication
+  login(authData){
+    return apiClientSbr.post('/matcha-backend/api/login', authData)
+  }, 
+  getCurrentUser(){
+    return apiClientSbr.get('/matcha-backend/api/users/current')
   },
-  getData2() {
-    return apiClient.get('/data2')
+
+
+//Assessment
+  getDataAssessment($idKegiatan, $idUser){
+ 
+    return apiClientSbr.get('/matcha-backend/api/kegiatan/'+$idKegiatan+'/assessment/users/'+$idUser)
   },
-  getData3() {
-    return apiClient.get('/data3')
+  postDataAssessment($data, $idKegiatan, $idUser){
+    return apiClientSbr.post('/matcha-backend/api/kegiatan/'+$idKegiatan+'/assessment/users/'+$idUser, $data)
   },
-  getDataSBR($id){
-    return apiClientSbr.get('/assessment-backend/api/assessment?user='+$id)
-  },
-  getPetugas(){
-    return apiClientSbr.get('/assessment-backend/api/petugas')
-  },
-  postDataSBR($data){
-    return apiClientSbr.post('/assessment-backend/api/assessment', $data)
-  },
+
+  //Get Kegiatan Aktif
   getKegiatanActiveMatching(){
     return apiClientSbr.get('/matcha-backend/api/kegiatan?type=matching&status=active')
   },
-  getDataKegiatan($id_kegiatan){
-    return apiClientSbr.get('matcha-backend/api/kegiatan/'+$id_kegiatan+'/matching/2')
+  getKegiatanActiveAssessment(){
+    return apiClientSbr.get('/matcha-backend/api/kegiatan?type=assessment&status=active')
   },
-  postDataKegiatan($id_kegiatan, $data){
-    return apiClientSbr.post('matcha-backend/api/kegiatan/'+$id_kegiatan+'/matching/2', $data)
+  getKegiatanActiveMatchingAssessment($tipeKegiatan){
+    return apiClientSbr.get('/matcha-backend/api/kegiatan?type='+$tipeKegiatan+'&status=active')
+  },
+
+//Matching
+  getDataMatching($id_kegiatan, $idUser){
+    return apiClientSbr.get('matcha-backend/api/kegiatan/'+$id_kegiatan+'/matching/users/'+$idUser)
+  },
+  postDataMatching($id_kegiatan, $idUser, $data){
+    return apiClientSbr.post('matcha-backend/api/kegiatan/'+$id_kegiatan+'/matching/users/'+$idUser, $data)
+  },
+
+
+  getUsers(){
+    return apiClientSbr.get('matcha-backend/api/users?role=user')
+  },
+  getKegiatanActive(){
+    return apiClientSbr.get('matcha-backend/api/kegiatan?status=active')
+  },
+  getKegiatanData($id){
+    return apiClientSbr.get('matcha-backend/api/kegiatan/'+$id+'/dashboard/admin')
+  },
+  getKegiatanDataUser($id){
+    return apiClientSbr.get('matcha-backend/api/users/'+$id+'/dashboard')
+  },
+
+
+
+  //Kegiatan
+  getAllKegiatan(){
+    return apiClientSbr.get('matcha-backend/api/kegiatan')
+  },
+  postKegiatan($data){
+    return apiClientSbr.post('matcha-backend/api/kegiatan', $data)
+  },
+  updateKegiatan($id, $data){
+    return apiClientSbr.put('matcha-backend/api/kegiatan/'+$id, $data)
+  },
+  deleteKegiatan($id, $data){
+    return apiClientSbr.delete('matcha-backend/api/kegiatan/'+$id, $data)
+
+  },
+
+  //Alokasi
+  // getUsersKegiatanMatching($id){
+  //   return apiClientSbr.get('matcha-backend/api/kegiatan/'+$id+'/matching/alokasi')
+  // },
+  // submitAlokasiMatching($id, $data){
+  //   return apiClientSbr.post('matcha-backend/api/kegiatan/'+$id+'/matching/alokasi', $data)
+  // },
+  // getUsersKegiatanAssessment($id){
+  //   return apiClientSbr.get('matcha-backend/api/kegiatan/'+$id+'/assessment/alokasi')
+  // },
+  // submitAlokasiAssessment($id, $data){
+  //   return apiClientSbr.post('matcha-backend/api/kegiatan/'+$id+'/assessment/alokasi', $data)
+  // },
+  // deleteAlokasiMatching($idKegiatan, $idUser){
+  //   return apiClientSbr.delete('matcha-backend/api/kegiatan/'+$idKegiatan+'/matching/alokasi/users/'+$idUser)
+  // },
+
+  //Alokasi Efisien
+  getUsersKegiatan($id, $tipeAlokasi){
+    return apiClientSbr.get('matcha-backend/api/kegiatan/'+$id+'/'+$tipeAlokasi+'/alokasi')
+  },
+  submitAlokasi($id, $tipeAlokasi, $data){
+    return apiClientSbr.post('matcha-backend/api/kegiatan/'+$id+'/'+$tipeAlokasi+'/alokasi', $data)
+  },
+  deleteAlokasi($idKegiatan, $tipeAlokasi, $idUser){
+    return apiClientSbr.delete('matcha-backend/api/kegiatan/'+$idKegiatan+'/'+$tipeAlokasi+'/alokasi/users/'+$idUser)
   }
-  
 
 
 }

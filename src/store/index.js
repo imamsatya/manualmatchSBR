@@ -1,97 +1,107 @@
-import { createStore } from 'vuex'
+import {
+  createStore
+} from 'vuex'
 
-// Create a new store instance.
+import auth from './auth' 
 
 const mainstyle = {
   namespaced: true,
-  state (){
-    return{
+  state() {
+    return {
       myBgColorData: 'mylightbgcolor',
       myCardBgColorData: 'mylightcardcolor',
       myTextColorData: 'mylighttext-color'
     }
   },
-  getters:{
-    myBgColorData(state){
+  getters: {
+    myBgColorData(state) {
       return state.myBgColorData
     },
-    myCardBgColorData(state){
+    myCardBgColorData(state) {
       return state.myCardBgColorData
     },
-    myTextColorData(state){
+    myTextColorData(state) {
       return state.myTextColorData
     }
   },
   mutations: {
-    SET_TO_DARK(state, event){
+    SET_TO_DARK(state, event) {
       state.myBgColorData = event
       state.myCardBgColorData = 'mydarkcardcolor'
       state.myTextColorData = 'mydarktext-color'
     },
-    SET_TO_LIGHT(state, event){
+    SET_TO_LIGHT(state, event) {
       state.myBgColorData = event
       state.myCardBgColorData = 'mylightcardcolor'
       state.myTextColorData = 'mylighttext-color'
     }
   },
-  actions:{
-    setTheme({commit}, event){
-      if( event == 'mylightbgcolor'){
+  actions: {
+    setTheme({
+      commit
+    }, event) {
+      if (event == 'mylightbgcolor') {
         commit('SET_TO_LIGHT', event)
-      }else{
+      } else {
         commit('SET_TO_DARK', event)
-      } 
+      }
     }
   }
 }
 
 const compareTable = {
   namespaced: true,
-  state(){
-    return{
+  state() {
+    return {
       myData: [{}],
       mySelectedData: []
     }
   },
-  getters:{
-    myData(state){
+  getters: {
+    myData(state) {
       return state.myData
     },
-    mySelectedData(state){
+    mySelectedData(state) {
       return state.mySelectedData
     }
   },
-  mutations:{
-    SET_DATA(state, event){
+  mutations: {
+    SET_DATA(state, event) {
       state.myData = event
     },
-    SET_SELECTED_DATA(state, event){
+    SET_SELECTED_DATA(state, event) {
       state.mySelectedData = event
     }
-  },actions:{
-    setData({commit}, event){
+  },
+  actions: {
+    setData({
+      commit
+    }, event) {
       commit('SET_DATA', event)
     },
-    setSelectedData({commit}, event){
+    setSelectedData({
+      commit
+    }, event) {
       commit('SET_SELECTED_DATA', event)
     }
   }
 }
 
-export default  createStore({
+export default createStore({
   namespaced: true,
-  state () {
+  state() {
     return {
       count: 0,
-     
+
     }
   },
-  modules:{
+  modules: {
     mainstyle: mainstyle,
-    compareTable: compareTable
+    compareTable: compareTable,
+    auth: auth
   },
   mutations: {
-    increment (state) {
+    increment(state) {
       state.count++
     }
   }
