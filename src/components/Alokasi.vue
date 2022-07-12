@@ -1,16 +1,7 @@
 <template>
     <div class="p-grid p-p-0 p-p-sm-1 p-p-md-2 p-p-lg-3 ">
         <Toast />
-
-
-        <!-- {{this.tipeAlokasi}}
-        Users : {{this.users.data[0]}} <br><br>
-        UsersTeralokasi: {{this.usersKegiatan.data.alokasi[0]}}
-        {{deletedUsers}}
-        Deleted Users <br><br>
-        {{     deletedUsers}} <br><br>
-        Deleted First Alokasi Users <br><br>
-        {{deletedFirstAlokasiUsers}} -->
+        <!-- {{usersKegiatan}} halo -->
         <Loading v-model:active="loadingDialog" :is-full-page="true" :color="'#86d166'" :background-color="'black'"
             :opacity="0.7">
             <slot>
@@ -20,21 +11,7 @@
         </Loading>
         <div class="p-col-12 p-lg-12">
             <div>
-                <!-- <Card @mouseover="myShadow = ''" @mouseleave="myShadow = ''"
-                    :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
-                    style="border-radius: 18px;">
-                    <template #title>
 
-                    </template>
-                    <template #content>
-
-                        <Steps :model="items" :readonly="true" />
-
-
-
-                    </template>
-
-                </Card> -->
 
             </div>
 
@@ -268,7 +245,7 @@
                         <div class="p-col-12 p-mt-4" v-if="this.usersKegiatan.data.summary !== null">
                             <ProgressBar style="color:white;" v-if="tipeAlokasi == 'matching'"
                                 :value="((this.usersKegiatan.data.summary.teralokasi/this.usersKegiatan.data.summary.total_data_matching)*100).toFixed(2)" />
-                                 <ProgressBar style="color:white;" v-if="tipeAlokasi == 'assessment'"
+                            <ProgressBar style="color:white;" v-if="tipeAlokasi == 'assessment'"
                                 :value="((this.usersKegiatan.data.summary.teralokasi/this.usersKegiatan.data.summary.total_data_assessment)*100).toFixed(2)" />
 
                         </div>
@@ -340,10 +317,13 @@
 
         </div>
 
-        <Dialog :header="'Alokasi '+ this.tipeAlokasi.charAt(0).toUpperCase() + this.tipeAlokasi.slice(1)" v-model:visible="displayAlokasiDialog">
+        <Dialog :header="'Alokasi '+ this.tipeAlokasi.charAt(0).toUpperCase() + this.tipeAlokasi.slice(1)"
+            v-model:visible="displayAlokasiDialog">
             <div class="field col-12 md:col-3">
-                <label for="withoutgrouping">Alokasi {{this.tipeAlokasi.charAt(0).toUpperCase() + this.tipeAlokasi.slice(1)}}</label> <br>
-                <InputNumber :min="1" :max="parseInt(this.usersKegiatan.data.summary.belum_teralokasi)" id="withoutgrouping" v-model="jumlahAlokasi" mode="decimal" :useGrouping="false" />
+                <label for="withoutgrouping">Alokasi
+                    {{this.tipeAlokasi.charAt(0).toUpperCase() + this.tipeAlokasi.slice(1)}}</label> <br>
+                <InputNumber :min="1" :max="parseInt(this.usersKegiatan.data.summary.belum_teralokasi)"
+                    id="withoutgrouping" v-model="jumlahAlokasi" mode="decimal" :useGrouping="false" />
             </div>
             <template #footer>
                 <Button label="Cancel" icon="pi pi-times" @click="this.displayAlokasiDialog=false"
@@ -358,9 +338,11 @@
 
             </template>
             <div class="field col-12 md:col-3">
-                <label for="withoutgrouping">Edit Alokasi {{this.tipeAlokasi.charAt(0).toUpperCase() + this.tipeAlokasi.slice(1)}}</label> <br>
-                <InputNumber id="withoutgrouping" :min="1" :max="parseInt(this.usersKegiatan.data.summary.belum_teralokasi)+selectedUser.data.jumlah_alokasi" v-model="editedAlokasi" mode="decimal"
-                    :useGrouping="false" />
+                <label for="withoutgrouping">Edit Alokasi
+                    {{this.tipeAlokasi.charAt(0).toUpperCase() + this.tipeAlokasi.slice(1)}}</label> <br>
+                <InputNumber id="withoutgrouping" :min="1"
+                    :max="parseInt(this.usersKegiatan.data.summary.belum_teralokasi)+selectedUser.data.jumlah_alokasi"
+                    v-model="editedAlokasi" mode="decimal" :useGrouping="false" />
             </div>
             <template #footer>
                 <Button label="Cancel" icon="pi pi-times" @click="this.displayEditAlokasiDialog=false"
@@ -379,7 +361,8 @@
 
 
             <template #footer>
-                <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="displayDeleteAlokasiDialog=false" />
+                <Button label="Cancel" icon="pi pi-times" class="p-button-text"
+                    @click="displayDeleteAlokasiDialog=false" />
                 <Button :loading="loadingButton" label="Yes" icon="pi pi-check" class="p-button-text"
                     @click="deleteFinal()" />
             </template>
@@ -517,7 +500,9 @@
                         this.errorMessages = []
                         this.usersKegiatan = response.data
                         console.log('Selected Kegiatan Users', this.usersKegiatan)
-                        this.checkAvailableUser()
+                        if (this.usersKegiatan.data.alokasi !== null) this.checkAvailableUser()
+
+
                         this.loadingDialog = false
                     })
                     .catch(error => {
@@ -558,18 +543,34 @@
             alocateSelectedUser(data) {
                 console.log(data)
                 this.selectedUser = data
-                console.log('length usersKegiatan', this.usersKegiatan.data.alokasi.length)
+                // console.log('length usersKegiatan', this.usersKegiatan.data.alokasi.length)
                 // var usersKegiatanLength = 0
                 // this.usersKegiatan.length == undefined ? usersKegiatanLength = 0 :  usersKegiatanLength = this.usersKegiatan.length
-               
-               if (this.tipeAlokasi == 'matching') {
-               this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_matching / (this.users.data
-                    .length + this.usersKegiatan.data.alokasi.length))
-               } else {
-                this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_assessment / (this.users.data
-                    .length + this.usersKegiatan.data.alokasi.length))
-               }
-              
+
+                if (this.usersKegiatan.data.alokasi !== null) {
+                    if (this.tipeAlokasi == 'matching') {
+                        this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_matching / (this
+                            .users.data
+                            .length + this.usersKegiatan.data.alokasi.length))
+                    } else {
+                        this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_assessment / (this
+                            .users.data
+                            .length + this.usersKegiatan.data.alokasi.length))
+                    }
+                } else {
+
+                     if (this.tipeAlokasi == 'matching') {
+                    this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_matching / this.users
+                        .data
+                        .length)
+                     } else{
+                         this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_assessment / this.users
+                        .data
+                        .length)
+                     }
+                }
+
+
                 this.displayAlokasiDialog = true
             },
             submitAlokasi() {
@@ -585,6 +586,9 @@
                 newUserObject.name = this.selectedUser.data.name
 
                 console.log('newUserObject', newUserObject)
+                if (this.usersKegiatan.data.alokasi == null) {
+                    this.usersKegiatan.data.alokasi = []
+                } 
                 this.usersKegiatan.data.alokasi.push(newUserObject)
 
 
@@ -639,15 +643,17 @@
                 console.log('user di Tabel', this.usersKegiatan.data.alokasi[foundIndex])
 
 
-                  this.usersKegiatan.data.summary.belum_teralokasi = parseInt(this.usersKegiatan.data.summary
-                        .belum_teralokasi) + parseInt(this.usersKegiatan.data.alokasi[foundIndex].jumlah_alokasi) - parseInt(this.editedAlokasi)
+                this.usersKegiatan.data.summary.belum_teralokasi = parseInt(this.usersKegiatan.data.summary
+                        .belum_teralokasi) + parseInt(this.usersKegiatan.data.alokasi[foundIndex].jumlah_alokasi) -
+                    parseInt(this.editedAlokasi)
 
-                    this.usersKegiatan.data.summary.teralokasi = parseInt(this.usersKegiatan.data.summary
-                        .teralokasi) - parseInt(this.usersKegiatan.data.alokasi[foundIndex].jumlah_alokasi) + parseInt(this.editedAlokasi)
+                this.usersKegiatan.data.summary.teralokasi = parseInt(this.usersKegiatan.data.summary
+                    .teralokasi) - parseInt(this.usersKegiatan.data.alokasi[foundIndex].jumlah_alokasi) + parseInt(
+                    this.editedAlokasi)
 
                 this.usersKegiatan.data.alokasi[foundIndex].jumlah_alokasi = this.editedAlokasi
 
-                
+
                 this.displayEditAlokasiDialog = false
             },
             deleteSelectedRowOption(data) {
@@ -669,14 +675,15 @@
 
                     const userKegiatanIndex = this.usersKegiatan.data.alokasi.findIndex(element => element
                         .id_user == this.selectedUser.data.id_user)
-                   
+
 
                     //update summary
                     this.usersKegiatan.data.summary.belum_teralokasi = parseInt(this.usersKegiatan.data.summary
-                        .belum_teralokasi) +
+                            .belum_teralokasi) +
                         parseInt(this.usersKegiatan.data.alokasi[userKegiatanIndex].jumlah_alokasi)
                     this.usersKegiatan.data.summary.teralokasi = parseInt(this.usersKegiatan.data.summary
-                        .teralokasi) - parseInt(this.usersKegiatan.data.alokasi[userKegiatanIndex].jumlah_alokasi)
+                        .teralokasi) - parseInt(this.usersKegiatan.data.alokasi[userKegiatanIndex]
+                        .jumlah_alokasi)
 
                     //delete di usersKegiatan
                     this.usersKegiatan.data.alokasi.splice(userKegiatanIndex, 1)
