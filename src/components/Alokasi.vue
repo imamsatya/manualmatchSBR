@@ -263,7 +263,8 @@
                         :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
                         style="border-radius: 0px 0px 18px 18px;">
                         <template #header>
-                            <div style="text-align: left">
+                            <div :class="myCardBgColorData+' '+myTextColorData+' p-col-12 p-grid p-jc-between'"
+                                style="text-align: left">
                                 Daftar User
                             </div>
 
@@ -290,13 +291,15 @@
                         :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn'"
                         style="border-radius:0px 0px 18px 18px;">
                         <template #header>
-                            <div style="text-align: left">
+                            <div :class="myCardBgColorData+' '+myTextColorData+' p-col-12 p-grid p-jc-between'"
+                                style="text-align: left">
                                 Daftar User Teralokasi
+                                <div style="text-align: right">
+                                    <Button :loading="loadingButton" label="Save" @click="submitAlokasiFinal()"
+                                        icon="pi pi-save" />
+                                </div>
                             </div>
-                            <div style="text-align: right">
-                                <Button :loading="loadingButton" label="Save" @click="submitAlokasiFinal()"
-                                    icon="pi pi-save" />
-                            </div>
+
 
                         </template>
                         <Column field="name" header="Nama"></Column>
@@ -559,15 +562,16 @@
                     }
                 } else {
 
-                     if (this.tipeAlokasi == 'matching') {
-                    this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_matching / this.users
-                        .data
-                        .length)
-                     } else{
-                         this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_assessment / this.users
-                        .data
-                        .length)
-                     }
+                    if (this.tipeAlokasi == 'matching') {
+                        this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_matching / this.users
+                            .data
+                            .length)
+                    } else {
+                        this.jumlahAlokasi = Math.floor(this.usersKegiatan.data.summary.total_data_assessment / this
+                            .users
+                            .data
+                            .length)
+                    }
                 }
 
 
@@ -588,7 +592,7 @@
                 console.log('newUserObject', newUserObject)
                 if (this.usersKegiatan.data.alokasi == null) {
                     this.usersKegiatan.data.alokasi = []
-                } 
+                }
                 this.usersKegiatan.data.alokasi.push(newUserObject)
 
 
@@ -732,6 +736,12 @@
         color: v-bind(textColor);
     }
 
+    .p-datatable .p-datatable-header {
+        background: none;
+        color: none;
+        border: none;
+    }
+
     .p-datatable-thead {
         background-color: v-bind(headerBg);
         color: v-bind(textColor);
@@ -767,12 +777,12 @@
     }
 
     .p-datatable-wrapper {
-        border-radius: 0px 0px 18px 18px;
+        /* border-radius: 0px 0px 18px 18px; */
     }
 
-    .p-datatable-header {
+    /* .p-datatable-header {
         border-radius: 18px 18px 0px 0px;
-    }
+    } */
 
     .p-progressbar .p-progressbar-label {
         color: white;

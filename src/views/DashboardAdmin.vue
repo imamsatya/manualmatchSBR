@@ -124,10 +124,29 @@
 
         <!-- Matching Assessment User -->
         <div class="p-col-12 p-lg-12" v-if="kegiatanData !== null">
-
-            <DataTable :value="kegiatanData.data.users" responsiveLayout="scroll"
+         
+            <DataTable :value="kegiatanData.data.users"  v-model:filters="filters"
+                filterDisplay="menu" :globalFilterFields="['nama','jumlah_matching','sisa_matching','jumlah_assessment','sisa_assessment']" :paginator="true"
+                responsiveLayout="scroll" :rows="10" dataKey="id" :rowHover="true"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                :rowsPerPageOptions="[10,25,50]"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 :class="myCardBgColorData+' '+myTextColorData+' '+myShadow+' p-m-2 animate__animated animate__fadeIn '"
-                style="border-radius: 18px;">
+                >
+                 <template #header>
+                    <div :class="myCardBgColorData+' '+myTextColorData+' p-col-12 p-grid p-jc-between'">
+
+                        <div :class="myCardBgColorData+' '+myTextColorData+ 'p-jc-start p-col-12 p-lg-3 p-mr-6'">
+                            <h2 class="">Daftar User</h2>
+                        </div>
+                        <div class=" p-col-12 p-lg-3 p-mt-2 p-mr-4 "><span class="p-input-icon-left">
+                                <i class="pi pi-search" />
+                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                            </span></div>
+                    </div>
+
+                   
+                </template>
                 <Column field="nama" header="Nama"></Column>
                 <Column field="jumlah_matching" header="Jumlah Matching"></Column>
                 <Column field="sisa_matching" header="Sisa Matching"></Column>
@@ -151,14 +170,58 @@
     import ProgressBar from 'primevue/progressbar'
     import Breadcrumb from 'primevue/breadcrumb';
 import DataService from '../services/DataService';
+import InputText from 'primevue/inputtext';
+import {
+        FilterMatchMode,
+        FilterOperator
+    } from 'primevue/api';
     // import UserService from '../services/UserService'
     export default {
         components: {
             ProgressBar,
-            Breadcrumb
+            Breadcrumb,
+            InputText
         },
         data() {
             return {
+                filters: {
+                    'global': {
+                        value: null,
+                        matchMode: FilterMatchMode.CONTAINS
+                    },
+                    'nama': {
+                        operator: FilterOperator.AND,
+                        constraints: [{
+                            value: null,
+                            matchMode: FilterMatchMode.STARTS_WITH
+                        }]
+                    },
+                    'jumlah_matching': {
+                        operator: FilterOperator.AND,
+                        constraints: [{
+                            value: null,
+                            matchMode: FilterMatchMode.STARTS_WITH
+                        }]
+                    },
+                    'sisa_matching': {
+                        value: null,
+                        matchMode: FilterMatchMode.IN
+                    },
+                    'jumlah_assessment': {
+                        operator: FilterOperator.AND,
+                        constraints: [{
+                            value: null,
+                            matchMode: FilterMatchMode.DATE_IS
+                        }]
+                    },
+                    'sisa_assessment': {
+                        operator: FilterOperator.AND,
+                        constraints: [{
+                            value: null,
+                            matchMode: FilterMatchMode.EQUALS
+                        }]
+                    }
+                },
                 home: {icon: 'pi pi-home', to: '/'},
             items: [
                 {label: 'Dashboard'},
@@ -325,6 +388,12 @@ import DataService from '../services/DataService';
         color: v-bind(textColor);
     }
 
+    .p-datatable .p-datatable-header {
+        background: none;
+        color: none;
+        border: none;
+    }
+
     .p-datatable-thead {
         background-color: v-bind(headerBg);
         color: v-bind(textColor);
@@ -353,7 +422,7 @@ import DataService from '../services/DataService';
     
 
     .p-datatable-wrapper {
-        border-radius: 18px;
+        /* border-radius: 18px; */
     }
 
     .p-progressbar .p-progressbar-label {

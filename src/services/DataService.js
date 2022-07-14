@@ -58,6 +58,10 @@ export default {
     return apiClientSbr.get('/matcha-backend/api/users/current')
   },
 
+//User
+addNewUser($data){
+  return apiClientSbr.post('/matcha-backend/api/users', $data)
+},
 
 //Assessment
   getDataAssessment($idKegiatan, $idUser){
@@ -88,6 +92,9 @@ export default {
   },
 
 
+  getAllUsers(){
+    return apiClientSbr.get('matcha-backend/api/users')
+  },
   getUsers(){
     return apiClientSbr.get('matcha-backend/api/users?role=user')
   },

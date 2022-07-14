@@ -426,9 +426,9 @@
         box-shadow: 0 0 1px rgba(0, 0, 0, 0);
     }
 
-    .hvr-bob:hover,
-    .hvr-bob:focus,
-    .hvr-bob:active {
+    .hvr-bob,
+    .hvr-bob,
+    .hvr-bob {
         -webkit-animation-name: hvr-bob-float, hvr-bob;
         animation-name: hvr-bob-float, hvr-bob;
         -webkit-animation-duration: .3s, 1.5s;

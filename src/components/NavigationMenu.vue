@@ -100,6 +100,18 @@
                                 </div>
                             </router-link>
                             <br>
+                             <router-link v-if="currentUser.roles[0]['name'] == 'ROLE_ADMIN'" :to="{name: 'manajemenUser'}"
+                                 @click="this.$emit('showSideBar')">
+                                <div :class="myTextColorData+ ' hvr-fade'"
+                                    style="padding: 10px;font-size: 20px;font-weight: 600; border-radius: 30px; text-decoration: none;width: 150%;margin-left: 10px;">
+
+                                    <div>
+                                        <i class="pi pi-user p-mr-2 p-ml-2"></i>
+                                        Users
+                                    </div>
+                                </div>
+                            </router-link>
+                            <br>
                             <!-- <router-link v-if="currentUser.roles[0]['name'] == 'ROLE_ADMIN'" to="/history"
                                 @click="visibleLeft = false">
                                 <div :class="myTextColorData+ ' hvr-fade'"

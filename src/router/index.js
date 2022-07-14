@@ -85,6 +85,20 @@ const routes = [
     
   },
   {
+    path: '/manajemen_user',
+    
+    component: () => import('../views/MyLayout2.vue'),
+    children: [{
+      path: '',
+      name: 'manajemenUser',
+      component: () => import(/* webpackChunkName: "Kegiatan"*/'../views/ManagementUser.vue')
+    }],
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    
+  },
+  {
     path: '/history',
     name: 'History',
     component: () => import('../views/MyLayout2.vue'),

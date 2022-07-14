@@ -7,6 +7,9 @@
         <br><br> -->
 
         <!-- <p>Options 0 : {{options[0][0]['name']}}</p> -->
+        <!-- {{this.finalSelectedData}} <br><br>
+
+        {{this.selectedData}} -->
         <div :class="'p-col-12 p-lg-12 p-ml-2 p-mr-2 ' ">
             <Breadcrumb :home="home" :model="items" />
         </div>
@@ -200,10 +203,9 @@
                     severity="danger"></Badge>
             </Button>
         </div>
- <!-- rowGroupMode="subheader"  :groupRowsBy="selectedVariabelSumber['name']" sortMode="single"-->
+        <!-- rowGroupMode="subheader"  :groupRowsBy="selectedVariabelSumber['name']" sortMode="single"-->
         <DataTable id="myTable" v-if="this.matchingData !== null" :frozenValue="lockedData" :value="this.matchingData"
             v-model:filters="filters" filterDisplay="menu" :scrollable="true" scrollHeight="800px" showGridlines
-            
             :sortOrder="1" :paginator="false" :rows="10"
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             :rowsPerPageOptions="[10,20,50]" responsiveLayout="scroll" :rowHover="true" dataKey="id"
@@ -243,7 +245,7 @@
 
                 <template :class="myCardBgColorData+' '+myTextColorData" #body="slotProps">
                     <div v-if="!slotProps.frozenRow" class="p-d-flex p-jc-center p-ai-center ">
-                        <Checkbox :id="slotProps.index" class="p-ml-4"  v-model="selectedData[slotProps.index]"
+                        <Checkbox :id="slotProps.index" class="p-ml-4" v-model="selectedData[slotProps.index]"
                             :binary="true" />
                     </div>
                     <!-- <div v-else class="frozenRowBg">
@@ -478,7 +480,7 @@
         <Loading v-model:active="loadingDialog" :is-full-page="true" :color="'#86d166'" :background-color="'black'"
             :opacity="0.7">
             <slot>
-                
+
                 <MyLoading></MyLoading>
             </slot>
         </Loading>
@@ -808,9 +810,21 @@
                     this.loadingDialog = true
 
                     var idSbr = []
-                    this.finalSelectedData.forEach(element => {
+                    this.finalSelectedData = []
+                   
+                    for (let index = 0; index < this.selectedData.length; index++) {
+                        const element = this.selectedData[index];
+                        if (element) {
+                            this.finalSelectedData.push(this.matchingData[index])
+                        }
+
+                    }
+                    if (this.finalSelectedData != []) {
+                         this.finalSelectedData.forEach(element => {
                         idSbr.push(element.idsbr)
                     });
+                    }
+                   
                     const postForm = {
                         "id_alokasi": this.sbrData.id_alokasi,
                         "id_spool": this.sbrData.id_spool,
@@ -908,13 +922,13 @@
             preview($message, $status) {
                 // console.log(this.selectedData.indexOf(true))
                 // console.log(indexesOf(this.selectedData, true))
-                for (let index = 0; index < this.selectedData.length; index++) {
-                    const element = this.selectedData[index];
-                    if (element) {
-                        this.finalSelectedData.push(this.matchingData[index])
-                    }
+                // for (let index = 0; index < this.selectedData.length; index++) {
+                //     const element = this.selectedData[index];
+                //     if (element) {
+                //         this.finalSelectedData.push(this.matchingData[index])
+                //     }
 
-                }
+                // }
 
                 this.$toast.add({
                     severity: $status,
