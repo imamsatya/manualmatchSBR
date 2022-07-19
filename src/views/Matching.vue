@@ -811,7 +811,7 @@
 
                     var idSbr = []
                     this.finalSelectedData = []
-                   
+
                     for (let index = 0; index < this.selectedData.length; index++) {
                         const element = this.selectedData[index];
                         if (element) {
@@ -820,11 +820,11 @@
 
                     }
                     if (this.finalSelectedData != []) {
-                         this.finalSelectedData.forEach(element => {
-                        idSbr.push(element.idsbr)
-                    });
+                        this.finalSelectedData.forEach(element => {
+                            idSbr.push(element.idsbr)
+                        });
                     }
-                   
+
                     const postForm = {
                         "id_alokasi": this.sbrData.id_alokasi,
                         "id_spool": this.sbrData.id_spool,
@@ -857,67 +857,107 @@
                     this.changeBgTable()
                 } catch (error) {
                     console.log('err', error)
+                    this.loadingDialog = false
                 }
 
             },
             async getKegiatanData(data) {
-                console.log('selectedKegiatan', data.id_kegiatan)
-                this.loadingDialog = true
-                await DataService.getDataMatching(data.id_kegiatan, this.currentUser.id)
-                    .then(response => {
-                        // const myTable =document.getElementsByClassName("p-datatable-table").getElementsByTagName('td')
-                        // console.log(myTable, 'myTable')
-                        if (response.data.data.summary.sudah_matching == response.data.data.summary
-                            .total_data_matching) {
-                            // alert('Selamat. Kamu sudah selesai Matching!.')
-                            this.errorMessages = []
-                            this.successMessage = "Selamat. Kamu sudah selesai Matching"
-                            this.loadingDialog = false
+                try {
+                    console.log('selectedKegiatan', data.id_kegiatan)
+                    this.loadingDialog = true
+                    await DataService.getDataMatching(data.id_kegiatan, this.currentUser.id)
+                        .then(response => {
+                            // const myTable =document.getElementsByClassName("p-datatable-table").getElementsByTagName('td')
+                            // console.log(myTable, 'myTable')
+                            console.log('response', response)
+                            if (response.data.data !== null) {
+                                if (response.data.data.summary.sudah_matching == response.data.data.summary
+                                    .total_data_matching) {
+                                    // alert('Selamat. Kamu sudah selesai Matching!.')
+                                    this.errorMessages = []
+                                    this.successMessage = "Selamat. Kamu sudah selesai Matching"
+                                    this.loadingDialog = false
+                                    this.allData = null
+                                    this.sbrData = null
+                                    this.matchingData = null
+
+                                } else {
+                                    this.allData = response.data
+                                    this.sbrData = this.allData.data.spool
+                                    this.matchingData = this.allData.data.matching
+                                    console.log('response.data', this.allData)
+                                    console.log('sbrData', this.sbrData)
+                                    console.log('lockedCustomer', this.lockedData)
+                                    this.selectedData = new Array(this.matchingData.length).fill(false)
+                                    // this.lockedData = this.matchingData[0]
+
+                                    this.lockedData[0]['nama_perusahaan'] = this.sbrData['nama_perusahaan']
+                                    this.lockedData[0]['alamat'] = this.sbrData['alamat']
+                                    this.lockedData[0]['kode_provinsi'] = this.sbrData['kode_provinsi']
+                                    this.lockedData[0]['kode_kabupaten_kota'] = this.sbrData[
+                                        'kode_kabupaten_kota']
+                                    this.lockedData[0]['kode_kecamatan'] = this.sbrData['kode_kecamatan']
+                                    this.lockedData[0]['kode_kelurahan_desa'] = this.sbrData[
+                                        'kode_kelurahan_desa']
+                                    this.lockedData[0]['nomor_telepon'] = this.sbrData['nomor_telepon']
+                                    this.lockedData[0]['aktivitas_perusahaan'] = this.sbrData[
+                                        'aktivitas_perusahaan']
+                                    this.lockedData[0]['kbli_aktivitas'] = this.sbrData['kbli_aktivitas']
+                                    console.log('newlockedData', this.lockedData)
+                                    // delete this.lockedData['provinsi'];
+                                    this.errorMessages = []
+                                    this.successMessage = null
+                                    this.loadingDialog = false
+                                }
+                            } else {
+                                this.errorMessages.push(response.data.meta.message)
+                                this.loadingDialog = false
+                                this.allData = null
+                                this.sbrData = null
+                                this.matchingData = null
+                                this.successMessage = null
+                                this.$toast.add({
+                                    severity: 'error',
+                                    summary: 'Error!',
+                                    detail: 'Ups, ada error :(',
+                                    life: 5000
+                                });
+                            }
+
+
+
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            console.log('tes error', error.response.data.meta.message)
                             this.allData = null
                             this.sbrData = null
                             this.matchingData = null
-
-                        } else {
-                            this.allData = response.data
-                            this.sbrData = this.allData.data.spool
-                            this.matchingData = this.allData.data.matching
-                            console.log('response.data', this.allData)
-                            console.log('sbrData', this.sbrData)
-                            console.log('lockedCustomer', this.lockedData)
-                            this.selectedData = new Array(this.matchingData.length).fill(false)
-                            // this.lockedData = this.matchingData[0]
-
-                            this.lockedData[0]['nama_perusahaan'] = this.sbrData['nama_perusahaan']
-                            this.lockedData[0]['alamat'] = this.sbrData['alamat']
-                            this.lockedData[0]['kode_provinsi'] = this.sbrData['kode_provinsi']
-                            this.lockedData[0]['kode_kabupaten_kota'] = this.sbrData['kode_kabupaten_kota']
-                            this.lockedData[0]['kode_kecamatan'] = this.sbrData['kode_kecamatan']
-                            this.lockedData[0]['kode_kelurahan_desa'] = this.sbrData['kode_kelurahan_desa']
-                            this.lockedData[0]['nomor_telepon'] = this.sbrData['nomor_telepon']
-                            this.lockedData[0]['aktivitas_perusahaan'] = this.sbrData['aktivitas_perusahaan']
-                            this.lockedData[0]['kbli_aktivitas'] = this.sbrData['kbli_aktivitas']
-                            console.log('newlockedData', this.lockedData)
-                            // delete this.lockedData['provinsi'];
-                            this.errorMessages = []
                             this.successMessage = null
+                            this.errorMessages.push(error.response.data.meta.message)
                             this.loadingDialog = false
-                        }
 
+                             this.$toast.add({
+                        severity: 'error',
+                        summary: 'Error!',
+                        detail: 'Ups, ada error :(',
+                        life: 5000
+                    });
+                            // alert(error.response.data.meta.message)
 
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        console.log('tes error', error.response.data.meta.message)
-                        this.allData = null
-                        this.sbrData = null
-                        this.matchingData = null
-                        this.successMessage = null
-                        this.errorMessages.push(error.response.data.meta.message)
-                        this.loadingDialog = false
-                        // alert(error.response.data.meta.message)
+                        })
+                    this.changeBgTable()
+                } catch (error) {
+                    console.log('error fungsi', error)
+                    this.loadingDialog = false
+                    this.allData = null
+                    this.sbrData = null
+                    this.matchingData = null
+                    this.successMessage = null
+                    this.errorMessages.push(error.response.data.meta.message)
+                    this.loadingDialog = false
+                }
 
-                    })
-                this.changeBgTable()
             },
             preview($message, $status) {
                 // console.log(this.selectedData.indexOf(true))

@@ -564,7 +564,7 @@
 </template>
 <script>
     import DataService from '../services/DataService'
-    import dummy from '../services/dummy'
+    // import dummy from '../services/dummy'
     import RadioButton from 'primevue/radiobutton'
     import InputText from 'primevue/inputtext'
     import Toast from 'primevue/toast'
@@ -851,40 +851,58 @@
                 this.loadingDialog = true
                 await DataService.getDataAssessment(this.selectedKegiatan.id_kegiatan, this.currentId)
                     .then(response => {
+                        console.log('response Data Assessment', response)
                         var data = response.data
 
                         //untuk dummy
-                        data = dummy
-                        data = response.data
-                        if (response.data.data.summary.sudah_assessment == response.data.data.summary
-                            .total_data_assessment) {
-                            this.errorMessages = []
-                            this.successMessage = "Selamat. Kamu sudah selesai Assessment"
+                        // data = dummy
+                        // data = response.data
+                        if (response.data.data !== null) {
+                            if (response.data.data.summary.sudah_assessment == response.data.data.summary
+                                .total_data_assessment) {
+                                this.errorMessages = []
+                                this.successMessage = "Selamat. Kamu sudah selesai Assessment"
+                                this.transposedData = null
+                                this.datas2nd = null
+                                this.loadingDialog = false
+                            } else {
+                                console.log('response.data', data)
+                                console.log('SBR', data.data.data_sbr)
+                                this.data2View[0] = data.data.data_sbr
+                                this.userSummary = data.data.summary
+
+                                //Fungsi EditKey
+                                this.editKey(data)
+
+                                var thekeys = Object.keys(this.data2View[0])
+                                var myObj = {}
+                                thekeys.forEach(element => {
+                                    myObj[element] = null
+                                });
+
+                                this.selectedData = myObj
+                                console.log('created selectedData', this.selectedData)
+                                this.transpose(this.data2View[0])
+                                this.errorMessages = []
+                                this.successMessage = null
+                                this.loadingDialog = false
+                            }
+                        } else {
                             this.transposedData = null
                             this.datas2nd = null
-                            this.loadingDialog = false
-                        } else {
-                            console.log('response.data', data)
-                            console.log('SBR', data.data.data_sbr)
-                            this.data2View[0] = data.data.data_sbr
-                            this.userSummary = data.data.summary
-
-                            //Fungsi EditKey
-                            this.editKey(data)
-
-                            var thekeys = Object.keys(this.data2View[0])
-                            var myObj = {}
-                            thekeys.forEach(element => {
-                                myObj[element] = null
+                            this.successMessage = null
+                            this.errorMessages.push(response.data.meta.message)
+                            this.$toast.add({
+                                severity: 'error',
+                                summary: 'Error!',
+                                detail: 'Ups, ada error :(',
+                                life: 5000
                             });
 
-                            this.selectedData = myObj
-                            console.log('created selectedData', this.selectedData)
-                            this.transpose(this.data2View[0])
-                            this.errorMessages = []
-                            this.successMessage = null
                             this.loadingDialog = false
+
                         }
+
 
                     })
                     .catch(error => {
