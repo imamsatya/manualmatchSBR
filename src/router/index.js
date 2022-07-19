@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Login from '../views/LoginPage.vue'
 import store from '../store/index.js'
 const routes = [
@@ -7,7 +7,7 @@ const routes = [
     name: 'login',
     //karena inisiasi awal maka tidak perlu lazy load
     // component: () => import('../views/LoginPage.vue'),
-    component: Login
+    component:/* webpackChunkName: "login" */ Login
    
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -65,6 +65,7 @@ const routes = [
       name: 'dashboardUser',
       component: () => import(/* webpackChunkName: "DashboardAdmin"*/'../views/DashboardUser.vue')
     }],
+   
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -174,7 +175,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  // history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(process.env.BASE_URL),
   routes
 })
 

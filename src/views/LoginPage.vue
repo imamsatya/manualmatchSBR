@@ -125,7 +125,7 @@
                 //   }
                   this.$store.dispatch('login', this.authForm)
                         .then(response => {
-                            console.log('myResp', response)
+                            console.log('myResp login', response)
 
                             if (response.data.data.user.roles[0]['roles_name'] == 'ROLE_ADMIN') {
                                 this.$router.push({

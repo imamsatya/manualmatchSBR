@@ -38,7 +38,7 @@ export default {
     actions: {
         login({dispatch,commit}, data) {
             return new Promise((resolve, reject) => {
-                axios.post('https://webapps.bps.go.id/pengolahansbr/matcha-backend/api/login', data)
+                axios.post('https://matcha-dev.bps.go.id/matcha-backend/api/login', data)
                 // DataService.login(data)
                     .then(response => {
                         const token = response.data.data.access_token
@@ -62,7 +62,7 @@ export default {
                 return
             }
             try {
-                let response = await axios.get('https://webapps.bps.go.id/pengolahansbr/matcha-backend/api/users/current')
+                let response = await axios.get('https://matcha-dev.bps.go.id/matcha-backend/api/users/current')
                 // let response = await DataService.getCurrentUser()
                 console.log('myresponse current user', response)
                 commit('set_user', response.data.data)
