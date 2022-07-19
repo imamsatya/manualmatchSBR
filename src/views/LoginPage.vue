@@ -1,7 +1,7 @@
 <template>
     <div class="p-grid p-jc-center p-ai-center vertical-container myBg"
         style="min-height: 100vh; min-width: 100vh; color: #726b7c;">
-
+      
 
         <Card style="width: 25rem; margin-bottom: 2em; color: #726b7c;border-radius:14px;" class="p-shadow-6">
             <template #title>
@@ -107,6 +107,9 @@
 
             }
         },
+        // created(){
+        //       console.log('TES ENV', process.env.VUE_APP_BACKEND_URL)
+        // },
         methods: {
             userLogin() {
                 if (this.authForm.username !== null && this.authForm.password !== null) {

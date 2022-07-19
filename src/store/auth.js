@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import DataService from '../services/DataService'
+import DataService from '../services/DataService'
 //utils/auth.js
 
 
@@ -38,8 +38,8 @@ export default {
     actions: {
         login({dispatch,commit}, data) {
             return new Promise((resolve, reject) => {
-                axios.post('https://matcha-dev.bps.go.id/matcha-backend/api/login', data)
-                // DataService.login(data)
+                // axios.post('https://matcha-dev.bps.go.id/matcha-backend/api/login', data)
+                DataService.login(data)
                     .then(response => {
                         const token = response.data.data.access_token
                         // console.log('mytoken', token)
@@ -62,8 +62,8 @@ export default {
                 return
             }
             try {
-                let response = await axios.get('https://matcha-dev.bps.go.id/matcha-backend/api/users/current')
-                // let response = await DataService.getCurrentUser()
+                // let response = await axios.get('https://matcha-dev.bps.go.id/matcha-backend/api/users/current')
+                let response = await DataService.getCurrentUser()
                 console.log('myresponse current user', response)
                 commit('set_user', response.data.data)
             } catch (error) {

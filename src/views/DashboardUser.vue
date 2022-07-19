@@ -170,7 +170,7 @@ import DataService from '../services/DataService';
        async created(){
             // this.getAllKegiatan()
             const token = localStorage.getItem('token');
-            this.$store.dispatch('get_user', token)
+            await this.$store.dispatch('get_user', token)
             await  this.getKegiatanDataUser()
         },
 
