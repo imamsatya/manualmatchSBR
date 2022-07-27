@@ -302,7 +302,8 @@
                     linkBukuPedoman2021: null,
                     linkKuesioner2021: null
                 },
-                loadingDialog: false
+                loadingDialog: false,
+                finalForm: null
             }
         },
         watch: {
@@ -327,7 +328,7 @@
                 this.loadingDialog = true
                 if (this.validate()) {
                     if (this.tahun2020Display && this.tahun2021Display) {
-                         var finalForm = [{
+                         var allForm = [{
                             "tahun_kegiatan": 2020,
                             "subject_matter": this.formModel.subjectMatter,
                             "nama_kegiatan": this.formModel.namaKegiatan,
@@ -348,10 +349,12 @@
                             "link_kuesioner": this.formModel.linkKuesioner2021
                         }
                     ]
+                    this.finalForm = allForm
+
                     }
 
                     if (this.tahun2020Display && (this.tahun2021Display == false)) {
-                        var finalForm = [{
+                        var form2020 = [{
                             "tahun_kegiatan": 2020,
                             "subject_matter": this.formModel.subjectMatter,
                             "nama_kegiatan": this.formModel.namaKegiatan,
@@ -361,10 +364,12 @@
                             "link_bukped": this.formModel.linkBukuPedoman2020,
                             "link_kuesioner": this.formModel.linkKuesioner2020
                         }]
+
+                        this.finalForm = form2020
                     }
 
                     if (this.tahun2021Display && (this.tahun2020Display == false)) {
-                        var finalForm = [ {
+                        var form2021 = [ {
                             "tahun_kegiatan": 2021,
                             "subject_matter": this.formModel.subjectMatter,
                             "nama_kegiatan": this.formModel.namaKegiatan,
@@ -374,14 +379,16 @@
                             "link_bukped": this.formModel.linkBukuPedoman2021,
                             "link_kuesioner": this.formModel.linkKuesioner2021
                         }]
+
+                        this.finalForm = form2021
                     }
                    
                     try {
                         await axios.post("https://matcha-dev.bps.go.id/matcha-backend/api/direktori-link-sm",
-                                finalForm)
+                                this.finalForm)
                             .then(response => {
                                 console.log('response', response)
-                                console.log('final Form', finalForm)
+                                console.log('final Form', this.finalForm)
                                 this.formModel = {
                                     subjectMatter: null,
                                     namaKegiatan: null,
