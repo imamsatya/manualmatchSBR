@@ -273,6 +273,11 @@
 </script>
 
 <style>
+td div {
+    /* div will now take up full 200px of parent's height */
+    height: 100%;
+    width: 100%;
+}
   
     .mydarkbgcolor {
         background-color: #28243d;

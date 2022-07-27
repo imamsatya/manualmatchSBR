@@ -157,6 +157,12 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'notfound',
     component: () => import(/* webpackChunkName: "NotFound"*/'../views/NotFound.vue')
+  },
+  {
+    path: '/katalog-data-sbr',
+    // path: '/1',
+    name: 'direktoriLinkDataSM',
+    component: () => import(/* webpackChunkName: "KatalogDataSBR"*/'../views/DirektoriLinkDataSM.vue')
   }
   
   // {

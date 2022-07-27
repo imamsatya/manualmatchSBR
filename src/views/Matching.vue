@@ -204,8 +204,8 @@
             </Button>
         </div>
         <!-- rowGroupMode="subheader"  :groupRowsBy="selectedVariabelSumber['name']" sortMode="single"-->
-        <DataTable id="myTable" v-if="this.matchingData !== null" :frozenValue="lockedData" :value="this.matchingData"
-            v-model:filters="filters" filterDisplay="menu" :scrollable="true" scrollHeight="800px" showGridlines
+        <DataTable id="myTable" v-if="this.matchingData !== null" :frozenValue="lockedData" :value="this.matchingData" editMode="cell" @cell-edit-complete="onCellEditComplete"
+            v-model:filters="filters" filterDisplay="menu" :scrollable="true" scrollHeight="11800px" showGridlines
             :sortOrder="1" :paginator="false" :rows="10"
             paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             :rowsPerPageOptions="[10,20,50]" responsiveLayout="scroll" :rowHover="true" dataKey="id"
@@ -310,8 +310,8 @@
 
                     </div>
 
-                    <div v-if="col.frozenRow" class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
-                        {{col.data.kode_provinsi}}
+                    <div v-if="col.frozenRow" v-tooltip.bottom="col.data.nama_provinsi"  class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
+                        {{col.data.kode_provinsi}} 
                     </div>
                 </template>
             </Column>
@@ -325,7 +325,7 @@
 
                     </div>
 
-                    <div v-if="col.frozenRow" class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
+                    <div v-if="col.frozenRow" v-tooltip.bottom="col.data.nama_kabupaten_kota" class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
                         {{col.data.kode_kabupaten_kota}}
                     </div>
 
@@ -342,7 +342,7 @@
 
                     </div>
 
-                    <div v-if="col.frozenRow" class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
+                    <div v-if="col.frozenRow" v-tooltip.bottom="col.data.nama_kecamatan" class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
                         {{col.data.kode_kecamatan}}
                     </div>
                 </template>
@@ -357,7 +357,7 @@
 
                     </div>
 
-                    <div v-if="col.frozenRow" class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
+                    <div v-if="col.frozenRow" v-tooltip.bottom="col.data.nama_kelurahan_desa" class="frozenRowBg" style="color: #9155fd; font-weight: 700;">
                         {{col.data.kode_kelurahan_desa}}
                     </div>
 
@@ -893,10 +893,14 @@
 
                                     this.lockedData[0]['nama_perusahaan'] = this.sbrData['nama_perusahaan']
                                     this.lockedData[0]['alamat'] = this.sbrData['alamat']
+                                    this.lockedData[0]['nama_provinsi'] = this.sbrData['nama_provinsi']
                                     this.lockedData[0]['kode_provinsi'] = this.sbrData['kode_provinsi']
+                                       this.lockedData[0]['nama_kabupaten_kota'] = this.sbrData['nama_kabupaten_kota']
                                     this.lockedData[0]['kode_kabupaten_kota'] = this.sbrData[
                                         'kode_kabupaten_kota']
+                                        this.lockedData[0]['nama_kecamatan'] = this.sbrData['nama_kecamatan']
                                     this.lockedData[0]['kode_kecamatan'] = this.sbrData['kode_kecamatan']
+                                    this.lockedData[0]['nama_kelurahan_desa'] = this.sbrData['nama_kelurahan_desa']
                                     this.lockedData[0]['kode_kelurahan_desa'] = this.sbrData[
                                         'kode_kelurahan_desa']
                                     this.lockedData[0]['nomor_telepon'] = this.sbrData['nomor_telepon']

@@ -159,12 +159,16 @@
                 <label class="p-mb-3">Status Matching</label>
                 <div class="formgrid p-grid">
                     <div class="field-radiobutton p-col-12">
-                        <RadioButton id="matchingActive" name="category" :value="true" v-model="modelKegiatan.matching_active" />
+                        <RadioButton id="matchingActive" name="category" :value="1" v-model="modelKegiatan.matching_active" />
                         <label class="p-ml-2" for="matchingActive">Active</label>
                     </div>
                     <div class="field-radiobutton p-col-12">
-                        <RadioButton id="matchingInctive" name="category" :value="false" v-model="modelKegiatan.matching_active" />
+                        <RadioButton id="matchingInctive" name="category" :value="null" v-model="modelKegiatan.matching_active" />
                         <label class="p-ml-2" for="matchingInctive">Inactive</label>
+                    </div>
+                     <div class="field-radiobutton p-col-12">
+                        <RadioButton id="matchingInctive" name="category" :value="0" v-model="modelKegiatan.matching_active" />
+                        <label class="p-ml-2" for="matchingInctive">Selesai</label>
                     </div>
                   
                 </div>
@@ -174,12 +178,16 @@
                 <label class="p-mb-3">Status Assessment</label>
                 <div class="formgrid grid">
                     <div class="field-radiobutton p-col-12">
-                        <RadioButton id="AssessmentActive" name="category" :value="true" v-model="modelKegiatan.assessment_active" />
+                        <RadioButton id="AssessmentActive" name="category" :value="1" v-model="modelKegiatan.assessment_active" />
                         <label class="p-ml-2" for="AssessmentActive">Active</label>
                     </div>
                     <div class="field-radiobutton p-col-12">
-                        <RadioButton id="AssessmentInactive" name="category" :value="false" v-model="modelKegiatan.assessment_active" />
+                        <RadioButton id="AssessmentInactive" name="category" :value="null" v-model="modelKegiatan.assessment_active" />
                         <label class="p-ml-2" for="AssessmentInactive">Inactive</label>
+                    </div>
+                      <div class="field-radiobutton p-col-12">
+                        <RadioButton id="matchingInctive" name="category" :value="0" v-model="modelKegiatan.matching_active" />
+                        <label class="p-ml-2" for="matchingInctive">Selesai</label>
                     </div>
                   
                 </div>
@@ -362,6 +370,8 @@
                     this.modelKegiatan.description = data.data.description
                     data.data.matching_active == "1" ? this.modelKegiatan.matching_active=true : this.modelKegiatan.matching_active=false 
                     data.data.assessment_active == "1" ?  this.modelKegiatan.assessment_active=true :  this.modelKegiatan.assessment_active=false 
+
+                    
                     
 
                     console.log(this.modelKegiatan)
